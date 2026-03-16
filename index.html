@@ -6,32 +6,33 @@
 <title>Calculadora SCP — Portugal Brooklin · Paes & Gregori</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
 
 :root {
-  --pg-copper:   #b08050;
-  --pg-copper2:  #c9956a;
-  --pg-copper-l: rgba(176,128,80,0.12);
-  --pg-copper-b: rgba(176,128,80,0.25);
-  --pg-dark:     #1a1714;
-  --pg-dark2:    #221e1b;
-  --pg-dark3:    #2c2722;
-  --pg-dark4:    #352e28;
-  --pg-stone:    #8a7d72;
-  --pg-stone2:   #5c5248;
-  --pg-light:    #f0ebe4;
-  --pg-light2:   #d8cfc5;
-  --pg-white:    #faf7f3;
-  --green:       #5aaa7a;
-  --green-d:     rgba(90,170,122,0.12);
-  --red:         #c96060;
-  --red-d:       rgba(201,96,96,0.12);
-  --blue:        #6a9cc9;
-  --blue-d:      rgba(106,156,201,0.12);
+  /* Paes & Gregori — black/white/accent identity */
+  --pg-copper:   #c8a96e;
+  --pg-copper2:  #dfc08a;
+  --pg-copper-l: rgba(200,169,110,0.10);
+  --pg-copper-b: rgba(200,169,110,0.22);
+  --pg-dark:     #0a0a0a;
+  --pg-dark2:    #111111;
+  --pg-dark3:    #181818;
+  --pg-dark4:    #222222;
+  --pg-stone:    #888888;
+  --pg-stone2:   #555555;
+  --pg-light:    #f4f4f4;
+  --pg-light2:   #cccccc;
+  --pg-white:    #ffffff;
+  --green:       #4db87a;
+  --green-d:     rgba(77,184,122,0.10);
+  --red:         #d45f5f;
+  --red-d:       rgba(212,95,95,0.10);
+  --blue:        #5b8fc9;
+  --blue-d:      rgba(91,143,201,0.10);
   --amber:       #c9a050;
-  --amber-d:     rgba(201,160,80,0.12);
-  --border:      rgba(176,128,80,0.18);
-  --border2:     rgba(176,128,80,0.08);
+  --amber-d:     rgba(201,160,80,0.10);
+  --border:      rgba(255,255,255,0.10);
+  --border2:     rgba(255,255,255,0.05);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,7 +41,7 @@ html { font-size: 15px; scroll-behavior: smooth; }
 body {
   background: var(--pg-dark);
   color: var(--pg-light);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Barlow', sans-serif;
   font-weight: 300;
   line-height: 1.65;
   min-height: 100vh;
@@ -49,61 +50,88 @@ body {
 /* ═══ HEADER / HERO ═══ */
 .hero {
   position: relative;
-  background: var(--pg-dark2);
-  border-bottom: 1px solid var(--border);
-  padding: 36px 48px 32px;
+  background: #000000;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0 48px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 32px;
+  align-items: stretch;
+  gap: 0;
   overflow: hidden;
 }
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 340px; height: 100%;
-  background: linear-gradient(135deg, transparent 40%, rgba(176,128,80,0.06) 100%);
-  pointer-events: none;
-}
-.hero-geo {
-  position: absolute;
-  top: 16px; right: 48px;
-  display: flex; gap: 10px; opacity: 0.18;
-}
-.geo-hex {
-  width: 28px; height: 28px;
-  clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-  background: var(--pg-copper);
-}
-.geo-hex.sm { width: 18px; height: 18px; opacity: 0.6; align-self: flex-end; }
 
-.logo-block {}
+/* Logo block — wordmark white on dark */
+.logo-block {
+  display: flex;
+  align-items: center;
+  padding: 28px 0;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding-right: 40px;
+  gap: 0;
+}
+.logo-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1;
+  gap: 0;
+}
+.logo-badge-line1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.logo-badge-line2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.logo-meta {
+  padding-left: 28px;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  margin-left: 28px;
+}
 .logo-eyebrow {
   font-family: 'DM Mono', monospace;
   font-size: 9px;
-  letter-spacing: 3px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--pg-copper);
-  margin-bottom: 10px;
+  color: var(--pg-stone);
+  margin-bottom: 6px;
 }
-.logo-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 32px;
-  font-weight: 300;
-  color: var(--pg-white);
-  letter-spacing: 2px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.logo-name span { color: var(--pg-copper2); font-style: italic; }
 .logo-sub {
-  font-size: 12px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pg-light);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.logo-sub2 {
+  font-size: 11px;
   font-weight: 300;
   color: var(--pg-stone);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
-.hero-right { text-align: right; }
+.hero-right {
+  text-align: right;
+  padding: 28px 0;
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 /* ── Live data pills ── */
 .live-strip {
@@ -119,7 +147,7 @@ body {
   gap: 6px;
   background: var(--pg-dark3);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 6px 12px;
   font-family: 'DM Mono', monospace;
   font-size: 11px;
@@ -139,13 +167,14 @@ body {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
 .hero-tagline {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 13px;
-  font-style: italic;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   color: var(--pg-stone);
   border-top: 1px solid var(--border2);
   padding-top: 8px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 /* ═══ MAIN LAYOUT ═══ */
@@ -157,11 +186,13 @@ body {
   margin: 40px 0 20px;
 }
 .section-head h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 400;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--pg-light);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 .section-line { flex:1; height:1px; background: var(--border2); }
 .section-note {
@@ -175,7 +206,7 @@ body {
 .card {
   background: var(--pg-dark2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 24px 26px;
 }
 .card-title {
@@ -203,12 +234,13 @@ body {
 }
 .metric-label { font-size: 10px; color: var(--pg-stone); letter-spacing: 0.5px; margin-bottom: 6px; }
 .metric-value {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 26px;
-  font-weight: 500;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
   line-height: 1;
   margin-bottom: 4px;
   color: var(--pg-light);
+  letter-spacing: 0.5px;
 }
 .metric-value.copper { color: var(--pg-copper2); }
 .metric-value.green  { color: var(--green); }
@@ -263,8 +295,8 @@ input[type=range]::-moz-range-thumb {
 .verdict.neg { background: var(--red-d);    border-color: rgba(201,96,96,0.3); }
 .verdict.neu { background: var(--amber-d);  border-color: rgba(201,160,80,0.3); }
 .verdict-icon {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px; flex-shrink: 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 700; flex-shrink: 0;
 }
 .verdict-title {
   font-size: 14px; font-weight: 500; margin-bottom: 3px;
@@ -340,7 +372,7 @@ table.bench tr:last-child td { border-bottom: none; }
 .be-card.warn { border-color: rgba(201,160,80,.25); }
 .be-card.bad  { border-color: rgba(201,96,96,.25); }
 .be-label { font-size: 10px; color: var(--pg-stone); margin-bottom: 8px; letter-spacing: 0.5px; }
-.be-val   { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; margin-bottom:4px; }
+.be-val   { font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700; margin-bottom:4px; letter-spacing:0.5px; }
 .be-card.ok   .be-val { color:var(--green); }
 .be-card.warn .be-val { color:var(--amber); }
 .be-card.bad  .be-val { color:var(--red); }
@@ -387,11 +419,24 @@ table.bench tr:last-child td { border-bottom: none; }
   flex-wrap: wrap;
 }
 .footer-brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20px; font-weight: 300; letter-spacing: 2px;
-  color: var(--pg-stone);
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
-.footer-brand span { color: var(--pg-copper); font-style: italic; }
+.footer-badge {
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center;
+  line-height: 1; gap: 0;
+}
+.footer-badge span {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--pg-stone);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+}
 .footer-info { font-size:11px; color:var(--pg-stone2); line-height:1.8; }
 .footer-disc {
   font-size: 10px; color: var(--pg-stone2);
@@ -407,8 +452,9 @@ table.bench tr:last-child td { border-bottom: none; }
 
 /* ═══ RESP ═══ */
 @media(max-width:900px) {
-  .hero { padding: 24px; flex-direction: column; align-items: flex-start; }
-  .hero-right { text-align: left; }
+  .hero { padding: 0 20px; flex-direction: column; align-items: flex-start; }
+  .logo-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 20px 0; width: 100%; }
+  .hero-right { text-align: left; padding: 16px 0; }
   .live-strip { justify-content: flex-start; }
   .main { padding: 24px; }
   .g2,.g3,.g4 { grid-template-columns: 1fr 1fr; }
@@ -423,15 +469,16 @@ table.bench tr:last-child td { border-bottom: none; }
 
 <!-- ═══════ HERO ═══════ -->
 <header class="hero">
-  <div class="hero-geo">
-    <div class="geo-hex"></div>
-    <div class="geo-hex sm"></div>
-    <div class="geo-hex" style="opacity:.4"></div>
-  </div>
   <div class="logo-block">
-    <div class="logo-eyebrow">Calculadora SCP · Pré-lançamento</div>
-    <div class="logo-name">Paes <span>&</span> Gregori</div>
-    <div class="logo-sub">Portugal Brooklin — Avenida Portugal, São Paulo</div>
+    <div class="logo-badge">
+      <span class="logo-badge-line1">PAES &amp;</span>
+      <span class="logo-badge-line2">GREGORI</span>
+    </div>
+    <div class="logo-meta">
+      <div class="logo-eyebrow">Calculadora SCP · Pré-lançamento</div>
+      <div class="logo-sub">Portugal Brooklin</div>
+      <div class="logo-sub2">Av. Portugal · Brooklin · São Paulo · Entrega Out/2029</div>
+    </div>
   </div>
   <div class="hero-right">
     <div class="live-strip" id="live-strip">
@@ -672,7 +719,12 @@ table.bench tr:last-child td { border-bottom: none; }
 <!-- ═══════ FOOTER ═══════ -->
 <footer class="footer-pg">
   <div>
-    <div class="footer-brand">Paes <span>&</span> Gregori</div>
+    <div class="footer-brand">
+      <div class="footer-badge">
+        <span>PAES &amp;</span>
+        <span>GREGORI</span>
+      </div>
+    </div>
     <div class="footer-info" style="margin-top:6px;">
       Desde 1998 · São Paulo, SP<br>
       Incorporadora com 20+ empreendimentos entregues<br>
