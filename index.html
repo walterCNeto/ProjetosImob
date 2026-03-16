@@ -326,7 +326,7 @@ input[type=range]::-moz-range-thumb {
 .sc-btn.acb { background: var(--blue-d);        border-color: var(--blue);        color: var(--blue); }
 
 /* ═══ TABLE ═══ */
-.t-wrap { overflow-x: auto; }
+.t-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 table.bench {
   width: 100%; border-collapse: collapse;
   font-size: 12px;
@@ -450,18 +450,89 @@ table.bench tr:last-child td { border-bottom: none; }
 /* ═══ CHART ═══ */
 .chart-wrap { position: relative; width: 100%; }
 
-/* ═══ RESP ═══ */
+/* ═══ RESPONSIVE ═══ */
+
+/* Tablet */
 @media(max-width:900px) {
   .hero { padding: 0 20px; flex-direction: column; align-items: flex-start; }
   .logo-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 20px 0; width: 100%; }
-  .hero-right { text-align: left; padding: 16px 0; }
+  .logo-meta { padding-left: 20px; margin-left: 20px; }
+  .hero-right { text-align: left; padding: 16px 0; width: 100%; }
   .live-strip { justify-content: flex-start; }
-  .main { padding: 24px; }
-  .g2,.g3,.g4 { grid-template-columns: 1fr 1fr; }
-  .footer-pg { padding: 24px; }
+  .main { padding: 20px 20px 60px; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: 1fr 1fr; }
+  .g4 { grid-template-columns: 1fr 1fr; }
+  .footer-pg { padding: 20px; flex-direction: column; align-items: flex-start; }
+  .section-head { margin: 28px 0 14px; }
 }
+
+/* Mobile */
 @media(max-width:600px) {
-  .g2,.g3,.g4 { grid-template-columns: 1fr; }
+  /* Hero */
+  .logo-badge-line1, .logo-badge-line2 { font-size: 20px; }
+  .logo-sub { font-size: 14px; }
+  .logo-meta { padding-left: 14px; margin-left: 14px; }
+
+  /* Live pills — 2 por linha */
+  .live-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .live-pill { justify-content: flex-start; }
+
+  /* Main padding */
+  .main { padding: 16px 16px 60px; }
+
+  /* All grids → 1 column */
+  .g2, .g3, .g4 { grid-template-columns: 1fr; gap: 10px; }
+
+  /* Cards */
+  .card { padding: 16px; }
+  .card-title { font-size: 9px; margin-bottom: 14px; }
+
+  /* Section heads */
+  .section-head { gap: 10px; margin: 24px 0 12px; }
+  .section-head h2 { font-size: 15px; }
+  .section-note { display: none; }
+
+  /* Metrics */
+  .metric { padding: 12px 14px; }
+  .metric-value { font-size: 22px; }
+
+  /* Sliders */
+  .sl-label { font-size: 12px; }
+  .sl-val { font-size: 11px; }
+
+  /* Charts — reduz altura no mobile */
+  .chart-wrap.h260 { height: 200px !important; }
+  .chart-wrap.h220 { height: 180px !important; }
+
+  /* Tabela — esconde colunas menos importantes */
+  table.bench th:nth-child(3),
+  table.bench td:nth-child(3),
+  table.bench th:nth-child(4),
+  table.bench td:nth-child(4) { display: none; }
+  table.bench th, table.bench td { padding: 10px 8px; font-size: 11px; }
+  .t-type { display: none; }
+
+  /* Breakeven cards */
+  .be-card { padding: 12px 14px; }
+  .be-val { font-size: 20px; }
+
+  /* Scenario tabs — scroll horizontal */
+  .sc-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .sc-btn { flex-shrink: 0; font-size: 9px; padding: 6px 11px; }
+
+  /* Verdict */
+  .verdict { padding: 12px 14px; gap: 10px; }
+  .verdict-title { font-size: 13px; }
+  .verdict-desc { font-size: 11px; }
+
+  /* Live data card no benchmarks */
+  #live-table { grid-template-columns: 1fr 1fr !important; }
+
+  /* Footer */
+  .footer-pg { padding: 16px; }
+  .footer-disc { font-size: 9px; }
+  .footer-info { font-size: 10px; }
 }
 </style>
 </head>
@@ -657,11 +728,11 @@ table.bench tr:last-child td { border-bottom: none; }
   <div class="g2">
     <div class="card">
       <div class="card-title">Retorno total acumulado por ativo</div>
-      <div class="chart-wrap" style="height:260px;"><canvas id="chart-bar"></canvas></div>
+      <div class="chart-wrap h260" style="height:260px;"><canvas id="chart-bar"></canvas></div>
     </div>
     <div class="card">
       <div class="card-title">Evolução patrimonial — SCP vs CDI líquido</div>
-      <div class="chart-wrap" style="height:260px;"><canvas id="chart-line"></canvas></div>
+      <div class="chart-wrap h260" style="height:260px;"><canvas id="chart-line"></canvas></div>
     </div>
   </div>
 
@@ -707,7 +778,7 @@ table.bench tr:last-child td { border-bottom: none; }
   <div class="g2">
     <div class="card">
       <div class="card-title">Fontes de retorno SCP</div>
-      <div class="chart-wrap" style="height:220px;"><canvas id="chart-donut"></canvas></div>
+      <div class="chart-wrap h220" style="height:220px;"><canvas id="chart-donut"></canvas></div>
     </div>
     <div class="card">
       <div class="card-title">Retorno real (descontado pelo IPCA)</div>
