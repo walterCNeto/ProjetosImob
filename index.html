@@ -7,208 +7,208 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
-
 :root {
-  --pg-copper:    #c8a96e;
-  --pg-copper2:   #dfc08a;
-  --pg-copper-l:  rgba(200,169,110,0.10);
-  --pg-dark:      #0a0a0a;
-  --pg-dark2:     #111111;
-  --pg-dark3:     #181818;
-  --pg-dark4:     #242424;
-  --pg-stone:     #888888;
-  --pg-stone2:    #555555;
-  --pg-light:     #f4f4f4;
-  --pg-light2:    #cccccc;
-  --green:        #4db87a;
-  --green-d:      rgba(77,184,122,0.10);
-  --red:          #d45f5f;
-  --red-d:        rgba(212,95,95,0.10);
-  --blue:         #5b8fc9;
-  --blue-d:       rgba(91,143,201,0.10);
-  --amber:        #c9a050;
-  --amber-d:      rgba(201,160,80,0.10);
-  --border:       rgba(255,255,255,0.10);
-  --border2:      rgba(255,255,255,0.05);
-  --border3:      rgba(255,255,255,0.03);
+  --pg-copper:#c8a96e; --pg-copper2:#dfc08a; --pg-copper-l:rgba(200,169,110,0.10);
+  --pg-dark:#0a0a0a; --pg-dark2:#111111; --pg-dark3:#181818; --pg-dark4:#242424;
+  --pg-stone:#888888; --pg-stone2:#555555; --pg-light:#f4f4f4; --pg-light2:#cccccc;
+  --green:#4db87a; --green-d:rgba(77,184,122,0.10);
+  --red:#d45f5f;   --red-d:rgba(212,95,95,0.10);
+  --blue:#5b8fc9;  --blue-d:rgba(91,143,201,0.10);
+  --amber:#c9a050; --amber-d:rgba(201,160,80,0.10);
+  --border:rgba(255,255,255,0.10); --border2:rgba(255,255,255,0.05);
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{background:var(--pg-dark);color:var(--pg-light);font-family:'Barlow',sans-serif;font-weight:300;line-height:1.65;min-height:100vh;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; scroll-behavior: smooth; }
-body { background: var(--pg-dark); color: var(--pg-light); font-family: 'Barlow', sans-serif; font-weight: 300; line-height: 1.65; min-height: 100vh; }
+/* HERO */
+.hero{background:#000;border-bottom:1px solid rgba(255,255,255,0.08);padding:0 48px;display:flex;justify-content:space-between;align-items:stretch;overflow:hidden;}
+.logo-block{display:flex;align-items:center;padding:26px 0;border-right:1px solid rgba(255,255,255,0.08);padding-right:36px;}
+.logo-badge{display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:1px;}
+.logo-badge-line1,.logo-badge-line2{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:#fff;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;}
+.logo-meta{padding-left:26px;border-left:1px solid rgba(255,255,255,0.08);margin-left:26px;}
+.logo-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--pg-stone);margin-bottom:5px;}
+.logo-sub{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:600;color:var(--pg-light);letter-spacing:.5px;text-transform:uppercase;}
+.logo-sub2{font-size:11px;font-weight:300;color:var(--pg-stone);}
+.hero-right{padding:22px 0 22px 36px;display:flex;flex-direction:column;justify-content:center;}
+.live-strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:10px;}
+.live-pill{display:flex;align-items:center;gap:6px;background:var(--pg-dark3);border:1px solid var(--border);border-radius:4px;padding:5px 11px;font-family:'DM Mono',monospace;font-size:10px;}
+.pill-label{color:var(--pg-stone);} .pill-value{color:var(--pg-light);}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite;}
+.live-dot.loading{background:var(--amber);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-tagline{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pg-stone2);text-align:right;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px;}
+.data-stamp{font-family:'DM Mono',monospace;font-size:9px;color:var(--pg-stone2);text-align:right;}
 
-/* ── HERO ── */
-.hero { background: #000; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 48px; display: flex; justify-content: space-between; align-items: stretch; overflow: hidden; }
-.logo-block { display: flex; align-items: center; padding: 26px 0; border-right: 1px solid rgba(255,255,255,0.08); padding-right: 36px; }
-.logo-badge { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; gap: 1px; }
-.logo-badge-line1, .logo-badge-line2 { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; font-weight: 800; color: #fff; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
-.logo-meta { padding-left: 26px; border-left: 1px solid rgba(255,255,255,0.08); margin-left: 26px; }
-.logo-eyebrow { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--pg-stone); margin-bottom: 5px; }
-.logo-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 600; color: var(--pg-light); letter-spacing: 0.5px; text-transform: uppercase; }
-.logo-sub2 { font-size: 11px; font-weight: 300; color: var(--pg-stone); }
-.hero-right { padding: 22px 0 22px 36px; display: flex; flex-direction: column; justify-content: center; }
-.live-strip { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-bottom: 10px; }
-.live-pill { display: flex; align-items: center; gap: 6px; background: var(--pg-dark3); border: 1px solid var(--border); border-radius: 4px; padding: 5px 11px; font-family: 'DM Mono', monospace; font-size: 10px; }
-.pill-label { color: var(--pg-stone); }
-.pill-value { color: var(--pg-light); font-weight: 400; }
-.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
-.live-dot.loading { background: var(--amber); }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-.hero-tagline { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--pg-stone2); text-align: right; border-top: 1px solid var(--border2); padding-top: 8px; margin-top: 4px; }
-.data-stamp { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--pg-stone2); text-align: right; }
+/* LAYOUT */
+.main{max-width:1200px;margin:0 auto;padding:36px 48px 80px;}
+.sh{display:flex;align-items:center;gap:16px;margin:36px 0 16px;}
+.sh h2{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--pg-light);white-space:nowrap;text-transform:uppercase;letter-spacing:1px;}
+.sh-line{flex:1;height:1px;background:var(--border2);}
+.sh-note{font-size:10px;color:var(--pg-stone);white-space:nowrap;font-family:'DM Mono',monospace;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
 
-/* ── MAIN ── */
-.main { max-width: 1200px; margin: 0 auto; padding: 36px 48px 80px; }
+/* CARD */
+.card{background:var(--pg-dark2);border:1px solid var(--border);border-radius:8px;padding:22px 24px;}
+.card-title{font-size:9px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--pg-copper);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border2);}
 
-/* ── SECTION HEAD ── */
-.sh { display: flex; align-items: center; gap: 16px; margin: 36px 0 18px; }
-.sh h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: var(--pg-light); white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
-.sh-line { flex: 1; height: 1px; background: var(--border2); }
-.sh-note { font-size: 10px; color: var(--pg-stone); white-space: nowrap; font-family: 'DM Mono', monospace; }
+/* METRIC */
+.metric{background:var(--pg-dark3);border:1px solid var(--border2);border-radius:8px;padding:15px 16px;}
+.metric-label{font-size:10px;color:var(--pg-stone);letter-spacing:.5px;margin-bottom:5px;}
+.metric-value{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;line-height:1;margin-bottom:3px;color:var(--pg-light);letter-spacing:.5px;}
+.metric-value.copper{color:var(--pg-copper2);} .metric-value.green{color:var(--green);}
+.metric-value.red{color:var(--red);}          .metric-value.blue{color:var(--blue);}
+.metric-sub{font-size:10px;color:var(--pg-stone);font-family:'DM Mono',monospace;}
 
-/* ── GRIDS ── */
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+/* SLIDERS */
+.sl-wrap{margin-bottom:14px;}
+.sl-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.sl-label{font-size:12px;font-weight:300;color:var(--pg-light2);}
+.sl-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--pg-copper2);}
+input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--pg-dark4);border-radius:1px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--pg-copper);border:2px solid var(--pg-dark);box-shadow:0 0 0 3px var(--pg-copper-l);cursor:pointer;transition:transform .15s;}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--pg-copper);border:2px solid var(--pg-dark);cursor:pointer;}
 
-/* ── CARD ── */
-.card { background: var(--pg-dark2); border: 1px solid var(--border); border-radius: 8px; padding: 22px 24px; }
-.card-title { font-size: 9px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; color: var(--pg-copper); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-.card-title::after { content:''; flex:1; height:1px; background: var(--border2); }
+/* STRATEGY TOGGLE */
+.strat-toggle{display:flex;gap:0;margin-bottom:20px;border:1px solid var(--border);border-radius:8px;overflow:hidden;width:fit-content;}
+.strat-btn{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:10px 28px;border:none;background:var(--pg-dark3);color:var(--pg-stone);cursor:pointer;transition:all .2s;border-right:1px solid var(--border);}
+.strat-btn:last-child{border-right:none;}
+.strat-btn.active{background:var(--pg-copper);color:#000;}
+.strat-btn:hover:not(.active){background:var(--pg-dark4);color:var(--pg-light);}
 
-/* ── METRIC ── */
-.metric { background: var(--pg-dark3); border: 1px solid var(--border2); border-radius: 8px; padding: 15px 16px; }
-.metric-label { font-size: 10px; color: var(--pg-stone); letter-spacing: 0.5px; margin-bottom: 5px; }
-.metric-value { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 3px; color: var(--pg-light); letter-spacing: 0.5px; }
-.metric-value.copper { color: var(--pg-copper2); }
-.metric-value.green  { color: var(--green); }
-.metric-value.red    { color: var(--red); }
-.metric-value.blue   { color: var(--blue); }
-.metric-sub { font-size: 10px; color: var(--pg-stone); font-family:'DM Mono',monospace; }
+/* SCENARIO CARDS */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+.sc-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.sc-card:hover{border-color:var(--pg-copper);}
+.sc-card.active-base{border-color:var(--amber);border-width:2px;}
+.sc-card.active-otimista{border-color:var(--green);border-width:2px;}
+.sc-card.active-pessimista{border-color:var(--red);border-width:2px;}
+.sc-head{padding:12px 16px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.sc-head.base{background:var(--amber-d);color:var(--amber);}
+.sc-head.otimista{background:var(--green-d);color:var(--green);}
+.sc-head.pessimista{background:var(--red-d);color:var(--red);}
+.sc-body{padding:12px 16px;background:var(--pg-dark3);}
+.sc-desc{font-size:11px;color:var(--pg-stone);line-height:1.6;margin-bottom:10px;}
+.sc-params{display:flex;flex-direction:column;gap:4px;}
+.sc-param{display:flex;justify-content:space-between;font-size:10px;}
+.sc-param-k{color:var(--pg-stone);} .sc-param-v{font-family:'DM Mono',monospace;color:var(--pg-light2);}
 
-/* ── SLIDERS ── */
-.sl-wrap { margin-bottom: 14px; }
-.sl-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
-.sl-label { font-size: 12px; font-weight: 300; color: var(--pg-light2); }
-.sl-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--pg-copper2); }
-input[type=range] { -webkit-appearance: none; width: 100%; height: 2px; background: var(--pg-dark4); border-radius: 1px; outline: none; cursor: pointer; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--pg-copper); border: 2px solid var(--pg-dark); box-shadow: 0 0 0 3px var(--pg-copper-l); cursor: pointer; transition: transform 0.15s; }
-input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.25); }
-input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%; background:var(--pg-copper); border:2px solid var(--pg-dark); cursor:pointer; }
+/* VERDICT */
+.verdict{border-radius:8px;padding:16px 18px;border:1px solid;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;}
+.verdict.pos{background:var(--green-d);border-color:rgba(77,184,122,.3);}
+.verdict.neg{background:var(--red-d);border-color:rgba(212,95,95,.3);}
+.verdict.neu{background:var(--amber-d);border-color:rgba(201,160,80,.3);}
+.v-icon{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;flex-shrink:0;line-height:1.4;}
+.v-title{font-size:13px;font-weight:500;margin-bottom:3px;}
+.verdict.pos .v-title{color:var(--green);} .verdict.neg .v-title{color:var(--red);} .verdict.neu .v-title{color:var(--amber);}
+.v-desc{font-size:11px;color:var(--pg-stone);line-height:1.6;}
 
-/* ── STRATEGY TOGGLE ── */
-.strat-toggle { display: flex; gap: 0; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; width: fit-content; }
-.strat-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 10px 28px; border: none; background: var(--pg-dark3); color: var(--pg-stone); cursor: pointer; transition: all 0.2s; border-right: 1px solid var(--border); }
-.strat-btn:last-child { border-right: none; }
-.strat-btn.active { background: var(--pg-copper); color: #000; }
-.strat-btn:hover:not(.active) { background: var(--pg-dark4); color: var(--pg-light); }
+/* AIRDNA SOURCE BOX */
+.source-box{background:var(--pg-dark3);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;margin-bottom:16px;}
+.source-title{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pg-copper);margin-bottom:10px;font-family:'DM Mono',monospace;}
+.source-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.source-item-label{font-size:10px;color:var(--pg-stone);margin-bottom:2px;}
+.source-item-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--pg-light);}
+.source-item-sub{font-size:9px;color:var(--pg-stone2);font-family:'DM Mono',monospace;}
 
-/* ── SCENARIO CARDS ── */
-.sc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-.sc-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; transition: border-color 0.2s; }
-.sc-card:hover { border-color: var(--pg-copper); }
-.sc-card.active-base { border-color: var(--amber); border-width: 2px; }
-.sc-card.active-otimista { border-color: var(--green); border-width: 2px; }
-.sc-card.active-pessimista { border-color: var(--red); border-width: 2px; }
-.sc-head { padding: 12px 16px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
-.sc-head.base      { background: var(--amber-d);  color: var(--amber); }
-.sc-head.otimista  { background: var(--green-d);  color: var(--green); }
-.sc-head.pessimista{ background: var(--red-d);    color: var(--red); }
-.sc-body { padding: 12px 16px; background: var(--pg-dark3); }
-.sc-desc { font-size: 11px; color: var(--pg-stone); line-height: 1.6; margin-bottom: 10px; }
-.sc-params { display: flex; flex-direction: column; gap: 4px; }
-.sc-param { display: flex; justify-content: space-between; font-size: 10px; }
-.sc-param-k { color: var(--pg-stone); }
-.sc-param-v { font-family: 'DM Mono', monospace; color: var(--pg-light2); }
+/* BREAKEVEN GOAL BOX */
+.goal-box{background:var(--pg-dark3);border:1px solid var(--border2);border-radius:8px;padding:16px 18px;margin-bottom:14px;}
+.goal-title{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:12px;}
+.goal-title.amber{color:var(--amber);}
+.goal-title.green{color:var(--green);}
+.goal-title.red{color:var(--red);}
+.goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.goal-item{background:var(--pg-dark4);border-radius:6px;padding:12px 14px;border:1px solid var(--border2);}
+.goal-item.achieved{border-color:rgba(77,184,122,.3);background:rgba(77,184,122,.05);}
+.goal-item.missing{border-color:rgba(212,95,95,.3);background:rgba(212,95,95,.05);}
+.goal-label{font-size:10px;color:var(--pg-stone);margin-bottom:5px;letter-spacing:.3px;}
+.goal-need{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.5px;margin-bottom:3px;}
+.goal-item.achieved .goal-need{color:var(--green);}
+.goal-item.missing  .goal-need{color:var(--red);}
+.goal-item:not(.achieved):not(.missing) .goal-need{color:var(--amber);}
+.goal-real{font-size:10px;font-family:'DM Mono',monospace;margin-bottom:2px;}
+.goal-item.achieved .goal-real{color:var(--green);}
+.goal-item.missing  .goal-real{color:var(--red);}
+.goal-item:not(.achieved):not(.missing) .goal-real{color:var(--pg-stone);}
+.goal-note{font-size:9px;color:var(--pg-stone2);font-family:'DM Mono',monospace;}
 
-/* ── VERDICT ── */
-.verdict { border-radius: 8px; padding: 16px 18px; border: 1px solid; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 14px; }
-.verdict.pos { background: var(--green-d);  border-color: rgba(77,184,122,0.3); }
-.verdict.neg { background: var(--red-d);    border-color: rgba(212,95,95,0.3); }
-.verdict.neu { background: var(--amber-d);  border-color: rgba(201,160,80,0.3); }
-.v-icon { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; flex-shrink: 0; line-height: 1.4; }
-.v-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-.verdict.pos .v-title { color: var(--green); }
-.verdict.neg .v-title { color: var(--red); }
-.verdict.neu .v-title { color: var(--amber); }
-.v-desc { font-size: 11px; color: var(--pg-stone); line-height: 1.6; }
+/* TABLES */
+.t-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.res-table{width:100%;border-collapse:collapse;font-size:12px;}
+.res-table th{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pg-stone);font-weight:400;font-family:'DM Mono',monospace;text-align:left;padding:8px 14px;border-bottom:1px solid var(--border);}
+.res-table td{padding:11px 14px;border-bottom:1px solid var(--border2);color:var(--pg-light2);vertical-align:middle;}
+.res-table tr:last-child td{border-bottom:none;}
+.res-table tr.hl td{background:rgba(200,169,110,0.05);}
+.res-table tr.hl td:first-child{border-left:2px solid var(--pg-copper);}
+.t-name{font-weight:400;color:var(--pg-light);font-size:13px;}
+.t-type{font-size:10px;color:var(--pg-stone);display:block;margin-top:1px;font-family:'DM Mono',monospace;}
+.t-mono{font-family:'DM Mono',monospace;font-size:12px;}
+.bw{display:flex;align-items:center;gap:8px;}
+.bt{flex:1;height:3px;background:var(--pg-dark4);border-radius:2px;}
+.bf{height:100%;border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1);}
+.rpill{font-size:9px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.rpill.low{background:var(--green-d);color:var(--green);border:1px solid rgba(77,184,122,.2);}
+.rpill.med{background:var(--amber-d);color:var(--amber);border:1px solid rgba(201,160,80,.2);}
+.rpill.high{background:var(--red-d);color:var(--red);border:1px solid rgba(212,95,95,.2);}
 
-/* ── RESULTS TABLE ── */
-.res-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.res-table th { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--pg-stone); font-weight: 400; font-family: 'DM Mono', monospace; text-align: left; padding: 8px 14px; border-bottom: 1px solid var(--border); }
-.res-table td { padding: 12px 14px; border-bottom: 1px solid var(--border2); color: var(--pg-light2); vertical-align: middle; }
-.res-table tr:last-child td { border-bottom: none; }
-.res-table tr.hl td { background: rgba(200,169,110,0.05); }
-.res-table tr.hl td:first-child { border-left: 2px solid var(--pg-copper); }
-.t-name { font-weight: 400; color: var(--pg-light); font-size: 13px; }
-.t-type { font-size: 10px; color: var(--pg-stone); display:block; margin-top:1px; font-family:'DM Mono',monospace; }
-.t-mono { font-family:'DM Mono',monospace; font-size: 12px; }
-.bw { display:flex; align-items:center; gap:8px; }
-.bt { flex:1; height:3px; background: var(--pg-dark4); border-radius:2px; }
-.bf { height:100%; border-radius:2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
-.rpill { font-size:9px; font-family:'DM Mono',monospace; padding:2px 8px; border-radius:20px; white-space:nowrap; }
-.rpill.low  { background:var(--green-d); color:var(--green); border:1px solid rgba(77,184,122,.2); }
-.rpill.med  { background:var(--amber-d); color:var(--amber); border:1px solid rgba(201,160,80,.2); }
-.rpill.high { background:var(--red-d);   color:var(--red);   border:1px solid rgba(212,95,95,.2); }
+/* LIVE BOX */
+.live-box{background:var(--pg-dark3);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;margin-bottom:16px;}
+.live-box-title{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pg-copper);margin-bottom:12px;font-family:'DM Mono',monospace;}
+.live-box-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.live-item-label{font-size:10px;color:var(--pg-stone);margin-bottom:2px;}
+.live-item-val{font-family:'DM Mono',monospace;font-size:15px;color:var(--pg-light);}
 
-/* ── BREAKEVEN ── */
-.be-card { background: var(--pg-dark3); border: 1px solid var(--border2); border-radius: 8px; padding: 14px 16px; text-align: center; }
-.be-card.ok   { border-color: rgba(77,184,122,.25); }
-.be-card.warn { border-color: rgba(201,160,80,.25); }
-.be-card.bad  { border-color: rgba(212,95,95,.25); }
-.be-label { font-size: 10px; color: var(--pg-stone); margin-bottom: 7px; letter-spacing: 0.4px; }
-.be-val { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; margin-bottom:3px; letter-spacing:.5px; }
-.be-card.ok   .be-val { color:var(--green); }
-.be-card.warn .be-val { color:var(--amber); }
-.be-card.bad  .be-val { color:var(--red); }
-.be-sub { font-size:10px; color:var(--pg-stone); font-family:'DM Mono',monospace; }
+/* CHART */
+.chart-wrap{position:relative;width:100%;}
 
-/* ── CHART ── */
-.chart-wrap { position: relative; width: 100%; }
+/* REAL RETURNS */
+.rr-row{margin-bottom:13px;}
+.rr-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
+.rr-name{color:var(--pg-stone);}
+.rr-val{font-family:'DM Mono',monospace;}
 
-/* ── FOOTER ── */
-.footer-pg { background: var(--pg-dark2); border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
-.footer-badge { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; gap: 1px; }
-.footer-badge span { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:800; color:var(--pg-stone); letter-spacing:2px; text-transform:uppercase; display:block; }
-.footer-info { font-size:10px; color:var(--pg-stone2); line-height:1.8; margin-top:8px; }
-.footer-disc { font-size: 9px; color: var(--pg-stone2); font-family: 'DM Mono', monospace; line-height: 1.7; max-width: 680px; border-top: 1px solid var(--border2); padding-top: 14px; margin-top: 14px; width: 100%; }
+/* FOOTER */
+.footer-pg{background:var(--pg-dark2);border-top:1px solid var(--border);padding:24px 48px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+.footer-badge{display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:1px;}
+.footer-badge span{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:var(--pg-stone);letter-spacing:2px;text-transform:uppercase;display:block;}
+.footer-info{font-size:10px;color:var(--pg-stone2);line-height:1.8;margin-top:8px;}
+.footer-disc{font-size:9px;color:var(--pg-stone2);font-family:'DM Mono',monospace;line-height:1.7;max-width:680px;border-top:1px solid var(--border2);padding-top:14px;margin-top:14px;width:100%;}
 
-/* ── LIVE DATA BOX ── */
-.live-box { background: var(--pg-dark3); border: 1px solid var(--border2); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
-.live-box-title { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--pg-copper); margin-bottom: 12px; font-family: 'DM Mono', monospace; }
-.live-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.live-item-label { font-size: 10px; color: var(--pg-stone); margin-bottom: 2px; }
-.live-item-val { font-family: 'DM Mono', monospace; font-size: 15px; color: var(--pg-light); }
-
-/* ── RESPONSIVE ── */
-@media(max-width:900px) {
-  .hero { padding: 0 20px; flex-direction: column; align-items: flex-start; }
-  .logo-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 18px 0; width: 100%; }
-  .hero-right { text-align: left; padding: 14px 0; width: 100%; }
-  .live-strip { justify-content: flex-start; }
-  .main { padding: 20px 20px 60px; }
-  .g2,.g3,.g4 { grid-template-columns: 1fr 1fr; }
-  .sc-grid { grid-template-columns: 1fr 1fr 1fr; }
-  .footer-pg { padding: 20px; flex-direction: column; }
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{padding:0 20px;flex-direction:column;align-items:flex-start;}
+  .logo-block{border-right:none;border-bottom:1px solid rgba(255,255,255,.08);padding:18px 0;width:100%;}
+  .hero-right{text-align:left;padding:14px 0;width:100%;}
+  .live-strip{justify-content:flex-start;}
+  .main{padding:20px 20px 60px;}
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr;}
+  .sc-grid{grid-template-columns:1fr 1fr 1fr;}
+  .source-grid{grid-template-columns:1fr 1fr;}
+  .goal-grid{grid-template-columns:1fr 1fr 1fr;}
+  .footer-pg{padding:20px;flex-direction:column;}
 }
-@media(max-width:600px) {
-  .logo-badge-line1, .logo-badge-line2 { font-size: 19px; }
-  .main { padding: 14px 14px 60px; }
-  .g2,.g3,.g4 { grid-template-columns: 1fr; gap: 8px; }
-  .sc-grid { grid-template-columns: 1fr; }
-  .strat-toggle { width: 100%; }
-  .strat-btn { flex: 1; padding: 10px 12px; font-size: 11px; }
-  .live-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .card { padding: 14px 16px; }
-  .sh h2 { font-size: 14px; }
-  .sh-note { display: none; }
-  .chart-wrap.h260 { height: 200px !important; }
-  .chart-wrap.h220 { height: 175px !important; }
-  .res-table th:nth-child(3), .res-table td:nth-child(3),
-  .res-table th:nth-child(4), .res-table td:nth-child(4) { display: none; }
-  .t-type { display: none; }
-  .res-table th, .res-table td { padding: 9px 8px; font-size: 11px; }
-  .footer-pg { padding: 14px; }
+@media(max-width:600px){
+  .logo-badge-line1,.logo-badge-line2{font-size:19px;}
+  .main{padding:14px 14px 60px;}
+  .g2,.g3,.g4,.sc-grid,.goal-grid{grid-template-columns:1fr;gap:8px;}
+  .source-grid{grid-template-columns:1fr 1fr;}
+  .strat-toggle{width:100%;}
+  .strat-btn{flex:1;padding:10px 8px;font-size:11px;}
+  .live-strip{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .card{padding:14px 16px;}
+  .sh h2{font-size:14px;}
+  .sh-note{display:none;}
+  .chart-wrap.h260{height:200px!important;}
+  .chart-wrap.h220{height:175px!important;}
+  .res-table th:nth-child(3),.res-table td:nth-child(3),
+  .res-table th:nth-child(4),.res-table td:nth-child(4){display:none;}
+  .t-type{display:none;}
+  .res-table th,.res-table td{padding:9px 8px;font-size:11px;}
+  .footer-pg{padding:14px;}
 }
 </style>
 </head>
@@ -242,16 +242,25 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
 <div class="main">
 
   <!-- ESTRATÉGIA -->
-  <div class="sh"><h2>Estratégia de saída</h2><div class="sh-line"></div><span class="sh-note">Parâmetros de cálculo do retorno</span></div>
-
+  <div class="sh"><h2>Estratégia de saída</h2><div class="sh-line"></div><span class="sh-note">Define como o retorno é calculado</span></div>
   <div class="strat-toggle">
     <button class="strat-btn active" id="btn-vender" onclick="setStrat('vender')">Vender na entrega</button>
     <button class="strat-btn" id="btn-operar" onclick="setStrat('operar')">Permanecer e operar Airbnb</button>
   </div>
 
+  <!-- FONTE AIRDNA — sempre visível -->
+  <div class="source-box">
+    <div class="source-title">Fonte AirDNA · Fev/2026 · 40 comparáveis Brooklin · receita já líquida da taxa Airbnb</div>
+    <div class="source-grid">
+      <div><div class="source-item-label">Receita média anual</div><div class="source-item-val">R$ 68.700</div><div class="source-item-sub">por studio / ano</div></div>
+      <div><div class="source-item-label">Ocupação média</div><div class="source-item-val">67%</div><div class="source-item-sub">~244 noites/ano</div></div>
+      <div><div class="source-item-label">Diária média (ADR)</div><div class="source-item-val">R$ 326</div><div class="source-item-sub">líquido Airbnb</div></div>
+      <div><div class="source-item-label">Top performer</div><div class="source-item-val">R$ 125k</div><div class="source-item-sub">Luxury Apartment · 54% ocup.</div></div>
+    </div>
+  </div>
+
   <!-- PARÂMETROS -->
   <div class="g2">
-    <!-- SCP -->
     <div class="card">
       <div class="card-title">Configuração SCP · Portugal Brooklin</div>
       <div class="sl-wrap">
@@ -262,11 +271,12 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
         <div class="sl-header"><span class="sl-label">Valorização esperada até a entrega</span><span class="sl-val" id="lbl-val">35%</span></div>
         <input type="range" id="s-val" min="10" max="55" step="5" value="35" oninput="update()">
       </div>
-      <!-- Campos visíveis só na estratégia OPERAR -->
+      <!-- OPERAR -->
       <div id="airbnb-fields">
         <div class="sl-wrap">
           <div class="sl-header"><span class="sl-label">Receita Airbnb anual por studio</span><span class="sl-val" id="lbl-airbnb">R$ 68.700</span></div>
-          <input type="range" id="s-airbnb" min="40000" max="120000" step="5000" value="68700" oninput="update()">
+          <input type="range" id="s-airbnb" min="40000" max="125000" step="5000" value="68700" oninput="update()">
+          <div style="font-size:10px;color:var(--pg-stone);margin-top:3px;">Média AirDNA: R$68.700 · Top: R$125.200</div>
         </div>
         <div class="sl-wrap">
           <div class="sl-header"><span class="sl-label">Custo de gestão + vacância</span><span class="sl-val" id="lbl-custo">25%</span></div>
@@ -277,8 +287,8 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
           <input type="range" id="s-anos" min="1" max="5" step="1" value="2" oninput="update()">
         </div>
       </div>
-      <!-- Campos visíveis só na estratégia VENDER -->
-      <div id="venda-fields">
+      <!-- VENDER -->
+      <div id="venda-fields" style="display:none;">
         <div class="sl-wrap">
           <div class="sl-header"><span class="sl-label">IR sobre ganho de capital</span><span class="sl-val" id="lbl-ir-gc">15%</span></div>
           <input type="range" id="s-ir-gc" min="0" max="22.5" step="2.5" value="15" oninput="update()">
@@ -292,11 +302,10 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
       </div>
     </div>
 
-    <!-- BENCHMARKS -->
     <div class="card">
-      <div class="card-title">Benchmarks · Dados ao vivo</div>
+      <div class="card-title">Benchmarks · Dados ao vivo · Banco Central</div>
       <div class="live-box">
-        <div class="live-box-title">Carregado automaticamente · Banco Central do Brasil</div>
+        <div class="live-box-title">Atualizado automaticamente a cada acesso</div>
         <div class="live-box-grid">
           <div><div class="live-item-label">Selic meta (a.a.)</div><div class="live-item-val" id="lt-selic">—</div></div>
           <div><div class="live-item-label">IPCA (12 meses)</div><div class="live-item-val" id="lt-ipca">—</div></div>
@@ -325,24 +334,23 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
   </div>
 
   <!-- CENÁRIOS -->
-  <div class="sh"><h2>Cenário econômico</h2><div class="sh-line"></div><span class="sh-note">Clique para aplicar</span></div>
-
-  <div class="sc-grid" id="sc-grid">
+  <div class="sh"><h2>Cenário econômico</h2><div class="sh-line"></div><span class="sh-note">Clique para aplicar — Selic calculada sobre dados ao vivo</span></div>
+  <div class="sc-grid">
     <div class="sc-card active-base" id="sc-base" onclick="setScenario('base')">
       <div class="sc-head base">Base</div>
       <div class="sc-body">
-        <div class="sc-desc">Selic em queda gradual para ~12%. IPCA controlado. Brooklin com valorização histórica. Monotrilho operando em 2026.</div>
+        <div class="sc-desc">Selic em queda gradual. IPCA controlado. Brooklin com valorização histórica. Dados AirDNA como parâmetro real.</div>
         <div class="sc-params">
           <div class="sc-param"><span class="sc-param-k">Selic proj.</span><span class="sc-param-v" id="scp-selic-base">—</span></div>
           <div class="sc-param"><span class="sc-param-k">Valorização</span><span class="sc-param-v">35%</span></div>
-          <div class="sc-param"><span class="sc-param-k">Airbnb/studio</span><span class="sc-param-v">R$68.700</span></div>
+          <div class="sc-param"><span class="sc-param-k">Airbnb/studio</span><span class="sc-param-v">R$68.700 (AirDNA)</span></div>
         </div>
       </div>
     </div>
     <div class="sc-card" id="sc-otimista" onclick="setScenario('otimista')">
       <div class="sc-head otimista">Otimista</div>
       <div class="sc-body">
-        <div class="sc-desc">Selic cai para ~9-10%. Polo corporativo Brooklin acelera. Airbnb com alta demanda. Queda de juros valoriza imóveis.</div>
+        <div class="sc-desc">Selic cai agressivamente. Polo corporativo Brooklin aquece. Airbnb com alta demanda de executivos.</div>
         <div class="sc-params">
           <div class="sc-param"><span class="sc-param-k">Selic proj.</span><span class="sc-param-v" id="scp-selic-oti">—</span></div>
           <div class="sc-param"><span class="sc-param-k">Valorização</span><span class="sc-param-v">45%</span></div>
@@ -353,7 +361,7 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
     <div class="sc-card" id="sc-pessimista" onclick="setScenario('pessimista')">
       <div class="sc-head pessimista">Pessimista</div>
       <div class="sc-body">
-        <div class="sc-desc">Selic permanece alta ou sobe. Recessão pressiona imóveis. Airbnb com vacância alta. Custo de oportunidade máximo.</div>
+        <div class="sc-desc">Selic alta persistente. Recessão pressiona imóveis e Airbnb. Custo de oportunidade máximo.</div>
         <div class="sc-params">
           <div class="sc-param"><span class="sc-param-k">Selic proj.</span><span class="sc-param-v" id="scp-selic-pes">—</span></div>
           <div class="sc-param"><span class="sc-param-k">Valorização</span><span class="sc-param-v">15%</span></div>
@@ -363,46 +371,41 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
     </div>
   </div>
 
-  <!-- RESULTADO -->
+  <!-- RESULTADO PRINCIPAL -->
   <div class="sh"><h2>Resultado</h2><div class="sh-line"></div></div>
-
   <div id="verdict-box" style="margin-bottom:14px;"></div>
   <div class="g4" id="metrics-grid" style="margin-bottom:20px;"></div>
 
-  <!-- GRÁFICO EVOLUÇÃO + TABELA -->
+  <!-- META PARA IGUALAR CDI — o coração da análise -->
+  <div class="sh"><h2>O que este investimento precisa entregar</h2><div class="sh-line"></div><span class="sh-note" id="goal-subtitle">Para igualar o CDI líquido — o investidor decide se acredita que é viável</span></div>
+  <div id="goal-section"></div>
+
+  <!-- EVOLUÇÃO + TABELA -->
   <div class="g2">
     <div class="card">
       <div class="card-title">Evolução patrimonial</div>
       <div class="chart-wrap h260" style="height:260px;"><canvas id="chart-line"></canvas></div>
     </div>
     <div class="card" style="padding:0;">
-      <table class="res-table" style="margin-top:0;">
-        <thead>
-          <tr>
-            <th>Ativo</th>
-            <th>Retorno acum.</th>
-            <th>Equiv. a.a.</th>
-            <th>Risco</th>
-            <th>Liquidez</th>
-          </tr>
-        </thead>
-        <tbody id="bench-tbody"></tbody>
-      </table>
+      <div class="t-wrap">
+        <table class="res-table">
+          <thead><tr>
+            <th>Ativo</th><th>Retorno acum.</th><th>Equiv. a.a.</th><th>Relativo</th><th>Risco</th><th>Liquidez</th>
+          </tr></thead>
+          <tbody id="bench-tbody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- PONTO DE EQUILÍBRIO -->
-  <div class="sh"><h2>Ponto de equilíbrio</h2><div class="sh-line"></div><span class="sh-note" id="be-subtitle">O que o SCP precisa entregar para igualar o CDI líquido</span></div>
-  <div class="g3" id="be-grid" style="margin-bottom:20px;"></div>
-
   <!-- DECOMPOSIÇÃO + RETORNO REAL -->
-  <div class="g2">
+  <div class="g2" style="margin-top:14px;">
     <div class="card">
       <div class="card-title">Decomposição do retorno SCP</div>
       <div class="chart-wrap h220" style="height:220px;"><canvas id="chart-donut"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Retorno real (descontado pelo IPCA)</div>
+      <div class="card-title">Retorno real descontado pelo IPCA</div>
       <div id="real-ret" style="padding-top:6px;"></div>
     </div>
   </div>
@@ -413,66 +416,54 @@ input[type=range]::-moz-range-thumb { width:13px; height:13px; border-radius:50%
 <footer class="footer-pg">
   <div>
     <div class="footer-badge"><span>PAES &amp;</span><span>GREGORI</span></div>
-    <div class="footer-info">Desde 1998 · São Paulo, SP · 20+ empreendimentos entregues<br><strong style="color:var(--pg-copper2)">Portugal Brooklin</strong> — Av. Portugal · Entrega Out/2029</div>
+    <div class="footer-info">Desde 1998 · São Paulo, SP · 20+ empreendimentos entregues<br><strong style="color:var(--pg-copper2)">Portugal Brooklin</strong> — Av. Portugal · Brooklin · Entrega Out/2029</div>
   </div>
-  <div class="footer-disc">
-    ⚠ Finalidade exclusivamente ilustrativa. Não constitui recomendação de investimento. Rentabilidade passada não garante retorno futuro. Dados econômicos via API pública do Banco Central do Brasil. Receita Airbnb baseada em dados AirDNA Fev/2026. Consulte assessor de investimentos regulado (CVM) e contador antes de qualquer decisão.
-  </div>
+  <div class="footer-disc">⚠ Finalidade exclusivamente ilustrativa. Não constitui recomendação de investimento. Rentabilidade passada não garante retorno futuro. Dados econômicos via API pública do Banco Central do Brasil. Receita Airbnb baseada em dados AirDNA Fev/2026 (40 comparáveis Brooklin). IR e corretagem estimados — consulte contador. Consulte assessor de investimentos regulado (CVM) antes de qualquer decisão.</div>
 </footer>
 
 <script>
-// ═══════════════════ LIVE DATA ═══════════════════
-const FALLBACK = { selic: 14.75, cdi: 14.65, ipca12m: 5.06 };
-let live = { ...FALLBACK, loaded: false, stamp: 'Referência Mar/2026' };
+// ══════════════ LIVE DATA ══════════════
+const FALLBACK = { selic:14.75, cdi:14.65, ipca12m:5.06 };
+let live = { ...FALLBACK, loaded:false, stamp:'Referência Mar/2026' };
 
 async function loadLive() {
   try {
-    const [sD, iD] = await Promise.all([
+    const [sD,iD] = await Promise.all([
       fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados/ultimos/1?formato=json').then(r=>r.json()),
       fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/12?formato=json').then(r=>r.json())
     ]);
     const selic = parseFloat(sD[sD.length-1].valor);
-    let acc = 1;
-    iD.slice(-12).forEach(d => acc *= (1 + parseFloat(d.valor)/100));
-    live = { selic: +selic.toFixed(2), cdi: +(selic*.99).toFixed(2), ipca12m: +((acc-1)*100).toFixed(2), loaded:true, stamp:'BCB · '+new Date().toLocaleDateString('pt-BR') };
+    let acc=1; iD.slice(-12).forEach(d=>acc*=(1+parseFloat(d.valor)/100));
+    live = { selic:+selic.toFixed(2), cdi:+(selic*.99).toFixed(2), ipca12m:+((acc-1)*100).toFixed(2), loaded:true, stamp:'BCB · '+new Date().toLocaleDateString('pt-BR') };
   } catch {
     try {
       const r = await fetch('https://brasilapi.com.br/api/taxas/v1');
-      if (r.ok) {
-        const t = await r.json();
-        const s = t.find(x=>x.nome==='Selic');
-        if (s) { live.selic=s.valor; live.cdi=+(s.valor*.99).toFixed(2); live.loaded=true; live.stamp='BrasilAPI · '+new Date().toLocaleDateString('pt-BR'); }
-      }
+      if (r.ok) { const t=await r.json(); const s=t.find(x=>x.nome==='Selic'); if(s){live.selic=s.valor;live.cdi=+(s.valor*.99).toFixed(2);live.loaded=true;live.stamp='BrasilAPI · '+new Date().toLocaleDateString('pt-BR');} }
     } catch {}
   }
   applyLive();
 }
 
 function applyLive() {
-  el('val-selic').textContent = live.selic.toFixed(2)+'%';
-  el('val-ipca').textContent  = live.ipca12m.toFixed(2)+'%';
-  el('val-cdi').textContent   = live.cdi.toFixed(2)+'%';
-  el('lt-selic').textContent  = live.selic.toFixed(2)+'% a.a.';
-  el('lt-ipca').textContent   = live.ipca12m.toFixed(2)+'% a.a.';
-  el('lt-cdi').textContent    = live.cdi.toFixed(2)+'% a.a.';
+  el('val-selic').textContent  = live.selic.toFixed(2)+'%';
+  el('val-ipca').textContent   = live.ipca12m.toFixed(2)+'%';
+  el('val-cdi').textContent    = live.cdi.toFixed(2)+'%';
+  el('lt-selic').textContent   = live.selic.toFixed(2)+'% a.a.';
+  el('lt-ipca').textContent    = live.ipca12m.toFixed(2)+'% a.a.';
+  el('lt-cdi').textContent     = live.cdi.toFixed(2)+'% a.a.';
   el('lt-ipca-plus').textContent = (live.ipca12m+6.5).toFixed(2)+'% a.a.';
   el('data-stamp').textContent = live.stamp;
-  ['dot-selic','dot-ipca','dot-cdi'].forEach(id => {
-    el(id).style.background = live.loaded ? 'var(--green)' : 'var(--amber)';
-    el(id).classList.remove('loading');
-  });
-  // Cenário base usa selic - 1.5 como projeção
-  const proj = Math.max(8, Math.min(16, live.selic - 1.5));
-  el('s-selic').value = proj;
-  // Atualiza labels dos cenários com selic ao vivo
-  el('scp-selic-base').textContent = (live.selic-1.5).toFixed(1)+'%';
-  el('scp-selic-oti').textContent  = (live.selic-4.5).toFixed(1)+'%';
-  el('scp-selic-pes').textContent  = (live.selic+0.5).toFixed(1)+'%';
+  ['dot-selic','dot-ipca','dot-cdi'].forEach(id=>{ el(id).style.background=live.loaded?'var(--green)':'var(--amber)'; el(id).classList.remove('loading'); });
+  // Labels cenários com selic ao vivo
+  el('scp-selic-base').textContent = Math.max(8,live.selic-1.5).toFixed(1)+'% proj.';
+  el('scp-selic-oti').textContent  = Math.max(8,live.selic-4.5).toFixed(1)+'% proj.';
+  el('scp-selic-pes').textContent  = Math.min(16,live.selic+0.5).toFixed(1)+'% proj.';
+  el('s-selic').value = Math.max(8,Math.min(16,live.selic-1.5));
   update();
 }
 
-// ═══════════════════ ESTRATÉGIA ═══════════════════
-let strat = 'vender'; // 'vender' | 'operar'
+// ══════════════ ESTRATÉGIA ══════════════
+let strat = 'operar';
 
 function setStrat(s) {
   strat = s;
@@ -480,36 +471,34 @@ function setStrat(s) {
   el('btn-operar').classList.toggle('active', s==='operar');
   el('airbnb-fields').style.display = s==='operar' ? 'block' : 'none';
   el('venda-fields').style.display  = s==='vender' ? 'block' : 'none';
-  el('be-subtitle').textContent = s==='vender'
-    ? 'O que o SCP precisa entregar para igualar o CDI líquido após IR e corretagem'
-    : 'O que o SCP precisa entregar para igualar o CDI líquido';
   update();
 }
 
-// ═══════════════════ CENÁRIOS ═══════════════════
+// ══════════════ CENÁRIOS ══════════════
+// Base usa dados reais AirDNA: R$68.700 média, 67% ocupação
 const SC = {
-  base:       { selic:-1.5, val:35, airbnb:68700, fii:8.5, fiiCota:3,   ir:17.5 },
-  otimista:   { selic:-4.5, val:45, airbnb:82000, fii:7.0, fiiCota:6,   ir:15   },
-  pessimista: { selic:+0.5, val:15, airbnb:50000, fii:9.5, fiiCota:-1,  ir:20   },
+  base:       { selicDelta:-1.5, val:35, airbnb:68700, fii:8.5, fiiCota:3,   ir:17.5, irGC:15, corret:5 },
+  otimista:   { selicDelta:-4.5, val:45, airbnb:82000, fii:7.0, fiiCota:6,   ir:15,   irGC:15, corret:5 },
+  pessimista: { selicDelta:+0.5, val:15, airbnb:50000, fii:9.5, fiiCota:-1,  ir:20,   irGC:15, corret:5 },
 };
 let currentSc = 'base';
 
 function setScenario(name) {
   currentSc = name;
   const sc = SC[name];
-  el('s-selic').value     = Math.max(8, Math.min(16, live.selic + sc.selic));
-  el('s-val').value       = sc.val;
-  el('s-airbnb').value    = sc.airbnb;
-  el('s-fii').value       = sc.fii;
-  el('s-fii-cota').value  = sc.fiiCota;
-  el('s-ir').value        = sc.ir;
-  ['base','otimista','pessimista'].forEach(n => {
-    el('sc-'+n).className = 'sc-card' + (n===name ? ' active-'+n : '');
-  });
+  el('s-selic').value    = Math.max(8,Math.min(16,live.selic+sc.selicDelta));
+  el('s-val').value      = sc.val;
+  el('s-airbnb').value   = sc.airbnb;
+  el('s-fii').value      = sc.fii;
+  el('s-fii-cota').value = sc.fiiCota;
+  el('s-ir').value       = sc.ir;
+  el('s-ir-gc').value    = sc.irGC;
+  el('s-corret').value   = sc.corret;
+  ['base','otimista','pessimista'].forEach(n=>{ el('sc-'+n).className='sc-card'+(n===name?' active-'+n:''); });
   update();
 }
 
-// ═══════════════════ PARÂMETROS ═══════════════════
+// ══════════════ CÁLCULOS ══════════════
 const OBRA = 3.5;
 
 function p() {
@@ -529,64 +518,134 @@ function p() {
   };
 }
 
-// ═══════════════════ CÁLCULOS ═══════════════════
 function calcSCP(d) {
-  const inv     = d.qtd * 200000;
-  const capGain = inv * d.val; // ganho bruto de capital
-
+  const inv = d.qtd * 200000;
+  const capGain = inv * d.val;
   if (strat === 'vender') {
-    // Desconta IR sobre ganho e corretagem sobre o valor de venda
     const irPago     = capGain * d.irGC;
     const corretPago = (inv + capGain) * d.corret;
     const lucroLiq   = capGain - irPago - corretPago;
-    const pct        = lucroLiq / inv;
-    const cagr       = Math.pow(1+pct, 1/OBRA) - 1;
-    return { inv, capGain, rLiq:0, total:lucroLiq, pct, cagr, periodo:OBRA,
-             irPago, corretPago, rendaBruta:0 };
+    const pct  = lucroLiq / inv;
+    const cagr = Math.pow(1+pct, 1/OBRA) - 1;
+    return { inv, capGain, rLiq:0, total:lucroLiq, pct, cagr, periodo:OBRA, irPago, corretPago, rendaBruta:0 };
   } else {
-    // Operação Airbnb
-    const periodo  = OBRA + d.anos;
-    const rBruta   = d.airbnb * d.qtd * d.anos;
-    const rLiq     = rBruta * (1 - d.custo);
-    const total    = capGain + rLiq;
-    const pct      = total / inv;
-    const cagr     = Math.pow(1+pct, 1/periodo) - 1;
-    return { inv, capGain, rLiq, total, pct, cagr, periodo,
-             irPago:0, corretPago:0, rendaBruta:rBruta };
+    const periodo = OBRA + d.anos;
+    const rBruta  = d.airbnb * d.qtd * d.anos;
+    const rLiq    = rBruta * (1-d.custo);
+    const total   = capGain + rLiq;
+    const pct     = total / inv;
+    const cagr    = Math.pow(1+pct, 1/periodo) - 1;
+    return { inv, capGain, rLiq, total, pct, cagr, periodo, irPago:0, corretPago:0, rendaBruta:rBruta };
   }
 }
 
 function calcCDI(d, T) {
-  const inv  = d.qtd * 200000;
-  const brut = Math.pow(1+d.selic, T) - 1;
-  const liq  = brut * (1-d.ir);
+  const inv=d.qtd*200000;
+  const liq=( Math.pow(1+d.selic,T)-1 )*(1-d.ir);
   return { pct:liq, abs:inv*liq, cagr:Math.pow(1+liq,1/T)-1 };
 }
-
-function calcFII(d, T) {
-  const inv      = d.qtd * 200000;
-  const rendAcc  = d.fii * 0.85 * T * inv;
-  const cotaGain = inv * (Math.pow(1+d.fiiC, T) - 1);
-  const tot      = rendAcc + cotaGain;
+function calcFII(d,T) {
+  const inv=d.qtd*200000;
+  const tot=d.fii*0.85*T*inv+inv*(Math.pow(1+d.fiiC,T)-1);
   return { pct:tot/inv, abs:tot, cagr:Math.pow(1+tot/inv,1/T)-1 };
 }
-
-function calcIPCAplus(d, T) {
-  const inv = d.qtd * 200000;
-  const j   = d.ipca + 0.065;
-  const b   = Math.pow(1+j, T) - 1;
-  const l   = b * (1-d.ir);
+function calcIPCAplus(d,T) {
+  const inv=d.qtd*200000;
+  const l=(Math.pow(1+d.ipca+.065,T)-1)*(1-d.ir);
   return { pct:l, abs:inv*l, cagr:Math.pow(1+l,1/T)-1 };
 }
-
-function calcPoup(d, T) {
-  const inv  = d.qtd * 200000;
-  const taxa = d.selic > 0.085 ? 0.065 : d.selic*0.7;
-  const ret  = Math.pow(1+taxa, T) - 1;
-  return { pct:ret, abs:inv*ret, cagr:taxa };
+function calcPoup(d,T) {
+  const inv=d.qtd*200000, taxa=d.selic>.085?.065:d.selic*.7;
+  return { pct:Math.pow(1+taxa,T)-1, abs:inv*(Math.pow(1+taxa,T)-1), cagr:taxa };
 }
 
-// ═══════════════════ RENDER ═══════════════════
+// ══════════════ GOAL SECTION — coração da análise ══════════════
+function renderGoal(d, scp, cdi) {
+  const scLabel = currentSc.charAt(0).toUpperCase()+currentSc.slice(1);
+  const scColor = {base:'amber',otimista:'green',pessimista:'red'}[currentSc];
+
+  if (strat === 'vender') {
+    // O que precisa acontecer para venda líquida ≥ CDI
+    // cdi.abs = capGain_bruto - capGain_bruto*irGC - (inv+capGain_bruto)*corret
+    // cdi.abs = capGain_bruto*(1-irGC-corret) - inv*corret
+    // capGain_bruto = (cdi.abs + inv*corret) / (1-irGC-corret)
+    const den      = 1 - d.irGC - d.corret;
+    const beCapGain = den > 0 ? (cdi.abs + scp.inv*d.corret) / den : Infinity;
+    const beValPct  = beCapGain / scp.inv * 100;
+    const beM2      = (scp.inv + beCapGain) / (d.qtd * 22);
+    const mktM2     = 13000;
+    const realValPct = d.val*100;
+    const realM2    = (scp.inv*(1+d.val)) / (d.qtd*22);
+
+    const valOk = realValPct >= beValPct;
+    const m2Ok  = realM2 >= beM2;
+
+    el('goal-section').innerHTML = `
+      <div class="goal-box">
+        <div class="goal-title ${scColor}">Cenário ${scLabel} · Estratégia vender na entrega · CDI projetado: ${f1(cdi.pct*100)}% em ${OBRA} anos</div>
+        <div class="goal-grid">
+          <div class="goal-item ${valOk?'achieved':'missing'}">
+            <div class="goal-label">Valorização bruta mínima necessária</div>
+            <div class="goal-need">${f1(Math.max(0,beValPct))}%</div>
+            <div class="goal-real">${valOk?'✓':'✗'} Você projetou: ${f1(realValPct)}%</div>
+            <div class="goal-note">${valOk?'Acima do mínimo exigido':'Abaixo — imóvel perde para CDI'}</div>
+          </div>
+          <div class="goal-item ${m2Ok?'achieved':'missing'}">
+            <div class="goal-label">m² mínimo na venda (22m²)</div>
+            <div class="goal-need">R$${fmt(Math.max(0,beM2))}</div>
+            <div class="goal-real">${m2Ok?'✓':'✗'} Projetado: R$${fmt(realM2)}/m²</div>
+            <div class="goal-note">Mercado atual: ~R$${fmt(mktM2)}/m²</div>
+          </div>
+          <div class="goal-item ${scp.total>=cdi.abs?'achieved':'missing'}">
+            <div class="goal-label">Retorno líquido mínimo (CDI)</div>
+            <div class="goal-need">R$${fmtM(cdi.abs)}</div>
+            <div class="goal-real">${scp.total>=cdi.abs?'✓':'✗'} SCP entrega: R$${fmtM(scp.total)}</div>
+            <div class="goal-note">Diferença: ${scp.total>=cdi.abs?'+':'-'}R$${fmt(Math.abs(scp.total-cdi.abs))}</div>
+          </div>
+        </div>
+      </div>`;
+  } else {
+    // Airbnb: o que precisa acontecer para capGain + rLiq ≥ cdi.abs
+    // Precisamos de val mínimo (dado airbnb fixo) e airbnb mínimo (dado val fixo)
+    const beValPct  = Math.max(0,(cdi.abs - scp.rLiq) / scp.inv * 100);
+    const beAirbnb  = Math.max(0,(cdi.abs - scp.capGain) / (d.qtd * d.anos * (1-d.custo)));
+    const beOcup    = Math.min(100,Math.max(0,beAirbnb / (d.airbnb/0.67) * 100)); // ocup necessária dado ADR fixo
+    // dados reais AirDNA para contexto
+    const airdnaMedia = 68700;
+    const airdnaOcup  = 67;
+
+    const valOk   = d.val*100 >= beValPct;
+    const airbnbOk = d.airbnb >= beAirbnb;
+    const ocupOk  = airdnaOcup >= beOcup;
+
+    el('goal-section').innerHTML = `
+      <div class="goal-box">
+        <div class="goal-title ${scColor}">Cenário ${scLabel} · Estratégia operar Airbnb ${d.anos} ano${d.anos>1?'s':''} · CDI projetado: ${f1(cdi.pct*100)}% em ${scp.periodo} anos</div>
+        <div class="goal-grid">
+          <div class="goal-item ${valOk?'achieved':'missing'}">
+            <div class="goal-label">Valorização mínima necessária</div>
+            <div class="goal-need">${f1(beValPct)}%</div>
+            <div class="goal-real">${valOk?'✓':'✗'} Você projetou: ${f1(d.val*100)}%</div>
+            <div class="goal-note">${valOk?'Acima do mínimo':'Precisa de mais valorização'}</div>
+          </div>
+          <div class="goal-item ${airbnbOk?'achieved':'missing'}">
+            <div class="goal-label">Receita Airbnb mínima/studio/ano</div>
+            <div class="goal-need">R$${fmt(beAirbnb)}</div>
+            <div class="goal-real">${airbnbOk?'✓':'✗'} AirDNA média: R$${fmt(airdnaMedia)}</div>
+            <div class="goal-note">${airbnbOk?'Média AirDNA já supera':'Abaixo da média local'}</div>
+          </div>
+          <div class="goal-item ${ocupOk?'achieved':'missing'}">
+            <div class="goal-label">Ocupação mínima necessária</div>
+            <div class="goal-need">${f1(beOcup)}%</div>
+            <div class="goal-real">${ocupOk?'✓':'✗'} AirDNA local: ${airdnaOcup}%</div>
+            <div class="goal-note">${ocupOk?'Média local já atinge':'Acima da média do bairro'}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
+// ══════════════ UPDATE ══════════════
 let cLine=null, cDonut=null;
 
 function update() {
@@ -597,7 +656,7 @@ function update() {
   const ipl = calcIPCAplus(d, scp.periodo);
   const pou = calcPoup(d, scp.periodo);
 
-  // labels
+  // slider labels
   el('lbl-qtd').textContent    = d.qtd+' studios';
   el('lbl-val').textContent    = f1(d.val*100)+'%';
   el('lbl-airbnb').textContent = 'R$ '+fmt(d.airbnb);
@@ -613,36 +672,35 @@ function update() {
   // verdict
   const diff = scp.pct - cdi.pct;
   const vb   = el('verdict-box');
-  const stratLabel = strat==='vender' ? 'na venda (líquido de IR + corretagem)' : 'com Airbnb';
   if (diff > 0.08) {
-    vb.innerHTML = verd('pos','▲',`SCP supera o CDI em ${f1(diff*100)} p.p. ${stratLabel}`,`Retorno SCP: ${f1(scp.pct*100)}% · CDI líquido: ${f1(cdi.pct*100)}% · Diferença absoluta: R$ ${fmt(scp.total - cdi.abs)}`);
+    vb.innerHTML = verd('pos','▲',`SCP supera o CDI em ${f1(diff*100)} p.p. no cenário ${currentSc}`,`Retorno SCP: ${f1(scp.pct*100)}% · CDI líquido: ${f1(cdi.pct*100)}% · Ganho adicional: R$${fmt(scp.total-cdi.abs)}`);
   } else if (diff > -0.05) {
-    vb.innerHTML = verd('neu','◈',`SCP empata com o CDI — margem de ${f1(Math.abs(diff)*100)} p.p.`,`Retorno SCP: ${f1(scp.pct*100)}% · CDI líquido: ${f1(cdi.pct*100)}% · Neste cenário o imóvel se justifica apenas como diversificação patrimonial.`);
+    vb.innerHTML = verd('neu','◈',`SCP empata com o CDI — margem de ${f1(Math.abs(diff)*100)} p.p.`,`Retorno SCP: ${f1(scp.pct*100)}% · CDI líquido: ${f1(cdi.pct*100)}% · Neste cenário o imóvel se justifica como diversificação patrimonial.`);
   } else {
-    vb.innerHTML = verd('neg','▼',`CDI supera o SCP em ${f1(Math.abs(diff)*100)} p.p. neste cenário`,`CDI: ${f1(cdi.pct*100)}% · SCP: ${f1(scp.pct*100)}% · A renda fixa vence. Considere ajustar as premissas ou aguardar queda de juros.`);
+    vb.innerHTML = verd('neg','▼',`CDI supera o SCP em ${f1(Math.abs(diff)*100)} p.p. neste cenário`,`CDI: ${f1(cdi.pct*100)}% · SCP: ${f1(scp.pct*100)}% · A renda fixa vence. Verifique se as premissas são realistas.`);
   }
 
   // metrics
-  const stratSub = strat==='vender'
-    ? `IR: -R$${fmt(scp.irPago)} · Corret: -R$${fmt(scp.corretPago)}`
-    : `Renda bruta: R$${fmt(scp.rendaBruta)}`;
   el('metrics-grid').innerHTML = [
-    { l:'Investimento',      v:'R$ '+fmtM(scp.inv),    c:'',       s:d.qtd+' studios × R$200k' },
-    { l:'Retorno SCP líq.',  v:f1(scp.pct*100)+'%',    c:diff>0?'green':'red', s:stratSub },
-    { l:'CAGR equiv./ano',   v:f2(scp.cagr*100)+'%',   c:'copper', s:'vs CDI '+f2(calcCDI(d,1).pct*100)+'% a.a. liq.' },
-    { l:'Ganho vs CDI',      v:(scp.total>cdi.abs?'+':'')+' R$'+fmt(Math.abs(scp.total-cdi.abs)), c:scp.total>cdi.abs?'green':'red', s:scp.total>cdi.abs?'imóvel vence':'CDI vence' },
+    { l:'Investimento total',    v:'R$ '+fmtM(scp.inv),    c:'',       s:d.qtd+' studios × R$200k' },
+    { l:'Retorno SCP',           v:f1(scp.pct*100)+'%',    c:diff>0?'green':'red', s:'R$'+fmtM(scp.total)+' em '+scp.periodo.toFixed(1)+'a' },
+    { l:'CAGR equiv./ano',       v:f2(scp.cagr*100)+'%',   c:'copper', s:'CDI: '+f2(calcCDI(d,1).pct*100)+'% a.a. liq.' },
+    { l:'vs CDI (absoluto)',     v:(scp.total>=cdi.abs?'+':'')+' R$'+fmt(Math.abs(scp.total-cdi.abs)), c:scp.total>=cdi.abs?'green':'red', s:scp.total>=cdi.abs?'imóvel vence':'CDI vence' },
   ].map(m=>`<div class="metric"><div class="metric-label">${m.l}</div><div class="metric-value ${m.c}">${m.v}</div><div class="metric-sub">${m.s}</div></div>`).join('');
 
-  // tabela
+  // goal section
+  renderGoal(d, scp, cdi);
+
+  // bench table
   const ativos = [
-    { n:'SCP Portugal Brooklin', t:strat==='vender'?'Venda na entrega · líquido IR+corret':'Imóvel compacto · Airbnb', ret:scp.pct, aa:scp.cagr, risco:'alto',  liq:'Nenhuma', hl:true  },
+    { n:'SCP Portugal Brooklin', t:strat==='vender'?'Venda líquida de IR+corretagem':'Imóvel + Airbnb · dados AirDNA', ret:scp.pct, aa:scp.cagr, risco:'alto',  liq:'Nenhuma', hl:true  },
     { n:'CDB 100% CDI',          t:'Renda fixa · FGC',          ret:cdi.pct, aa:cdi.cagr, risco:'baixo', liq:'Diária',   hl:false },
     { n:'Tesouro IPCA+ 6,5%',    t:'Renda fixa · Tesouro',      ret:ipl.pct, aa:ipl.cagr, risco:'baixo', liq:'D+1',      hl:false },
     { n:'FII Diversificado',      t:'Renda variável · Imob.',    ret:fii.pct, aa:fii.cagr, risco:'médio', liq:'Diária',   hl:false },
     { n:'Poupança',               t:'Renda fixa · FGC',          ret:pou.pct, aa:pou.cagr, risco:'baixo', liq:'Imediata', hl:false },
   ];
   const maxR = Math.max(...ativos.map(a=>a.ret));
-  const rm = {baixo:'low',médio:'med',alto:'high'};
+  const rm   = {baixo:'low',médio:'med',alto:'high'};
   el('bench-tbody').innerHTML = ativos.map(a=>`
     <tr class="${a.hl?'hl':''}">
       <td><span class="t-name">${a.n}</span><span class="t-type">${a.t}</span></td>
@@ -653,154 +711,85 @@ function update() {
       <td style="font-size:10px;color:var(--pg-stone)">${a.liq}</td>
     </tr>`).join('');
 
-  // breakeven
-  if (strat === 'vender') {
-    // Qual valorização mínima para igualar CDI depois de IR e corretagem
-    // cdi.abs = inv * val_bruta - val_bruta * irGC - (inv + val_bruta) * corret
-    // Resolve: val_bruta = (cdi.abs + inv*corret) / (1 - irGC - corret)
-    const num = cdi.abs + scp.inv * d.corret;
-    const den = 1 - d.irGC - d.corret;
-    const beGainBruto = Math.max(0, num / den);
-    const beValPct    = beGainBruto / scp.inv * 100;
-    const beM2Saida   = (scp.inv + beGainBruto) / (d.qtd * 22); // 22m² por studio
-    el('be-grid').innerHTML = [
-      { l:'Valorização mínima (bruta)', v:f1(Math.max(0,beValPct))+'%', ok:beValPct<=d.val*100, sub:`Projetado: ${f1(d.val*100)}%` },
-      { l:'m² mínimo na venda', v:'R$'+fmt(beM2Saida), ok:beM2Saida<=13000, sub:`Mercado atual: ~R$13.000` },
-      { l:'Retorno líquido mínimo', v:'R$'+fmt(cdi.abs), ok:scp.total>=cdi.abs, sub:`CDI acumulado no período` },
-    ].map(b=>{
-      const cls = b.ok?'ok':beValPct>50?'bad':'warn';
-      return `<div class="be-card ${cls}"><div class="be-label">${b.l}</div><div class="be-val">${b.v}</div><div class="be-sub">${b.sub} · ${b.ok?'✓ dentro do intervalo':'⚠ acima do projetado'}</div></div>`;
-    }).join('');
-  } else {
-    const beVal   = (cdi.abs - scp.rLiq) / scp.inv * 100;
-    const beAirbnb = Math.max(0, (cdi.abs - scp.capGain) / (d.qtd * d.anos * (1-d.custo)));
-    const beOcup  = Math.min(100, Math.max(0, (cdi.abs - scp.capGain) / (d.qtd * d.anos * d.airbnb * (1-d.custo)) * 100));
-    el('be-grid').innerHTML = [
-      { l:'Valorização mínima para bater CDI', v:f1(Math.max(0,beVal))+'%', ok:beVal<=d.val*100, sub:`Projetado: ${f1(d.val*100)}%` },
-      { l:'Receita Airbnb mínima/studio/ano',  v:'R$'+fmt(beAirbnb),        ok:beAirbnb<=d.airbnb, sub:`Projetado: R$${fmt(d.airbnb)}` },
-      { l:'Ocupação mínima Airbnb',            v:f0(beOcup)+'%',            ok:beOcup<=67, sub:`Média Brooklin: 67%` },
-    ].map(b=>{
-      const cls = b.ok?'ok':!b.ok&&(b.v.includes('R$')?parseFloat(b.v.replace(/\D/g,''))>100000:parseFloat(b.v)>80)?'bad':'warn';
-      return `<div class="be-card ${cls}"><div class="be-label">${b.l}</div><div class="be-val">${b.v}</div><div class="be-sub">${b.sub} · ${b.ok?'✓ dentro do intervalo':'⚠ acima do projetado'}</div></div>`;
-    }).join('');
-  }
-
   // retorno real
   const iT = Math.pow(1+d.ipca, scp.periodo)-1;
-  const rows = [
+  const rows=[
     {n:'SCP Brooklin',c:'var(--pg-copper2)',r:((1+scp.pct)/(1+iT))-1},
     {n:'CDB 100% CDI',c:'var(--blue)',      r:((1+cdi.pct)/(1+iT))-1},
-    {n:'FII',          c:'var(--green)',    r:((1+fii.pct)/(1+iT))-1},
+    {n:'FII simulado', c:'var(--green)',    r:((1+fii.pct)/(1+iT))-1},
   ];
   const mx = Math.max(...rows.map(r=>Math.abs(r.r)));
   el('real-ret').innerHTML = rows.map(r=>`
-    <div style="margin-bottom:13px;">
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;">
-        <span style="color:var(--pg-stone)">${r.n}</span>
-        <span style="font-family:'DM Mono',monospace;color:${r.r>=0?r.c:'var(--red)'}">${r.r>=0?'+':''}${f1(r.r*100)}%</span>
-      </div>
-      <div class="bt"><div class="bf" style="width:${(Math.abs(r.r)/mx*100).toFixed(1)}%;background:${r.r>=0?r.c:'var(--red)'}"></div></div>
-    </div>`).join('')
-    +`<div style="font-size:10px;color:var(--pg-stone);margin-top:10px;font-family:'DM Mono',monospace;">Inflação acumulada: +${f1(iT*100)}% (IPCA ${f1(d.ipca*100)}% a.a.)</div>`;
+    <div class="rr-row"><div class="rr-header">
+      <span class="rr-name">${r.n}</span>
+      <span class="rr-val" style="color:${r.r>=0?r.c:'var(--red)'}">${r.r>=0?'+':''}${f1(r.r*100)}%</span>
+    </div><div class="bt"><div class="bf" style="width:${(Math.abs(r.r)/mx*100).toFixed(1)}%;background:${r.r>=0?r.c:'var(--red)'}"></div></div></div>`).join('')
+    +`<div style="font-size:10px;color:var(--pg-stone);margin-top:12px;font-family:'DM Mono',monospace;">Inflação acumulada: +${f1(iT*100)}% (IPCA ${f1(d.ipca*100)}% a.a.)</div>`;
 
-  // charts
-  buildLine(d, scp, cdi, fii);
-  buildDonut(scp, d);
+  buildLine(d,scp,cdi,fii);
+  buildDonut(scp,d);
 }
 
-// ═══════════════════ CHARTS ═══════════════════
-function buildLine(d, scp, cdi, fii) {
-  const ctx = el('chart-line').getContext('2d');
-  const steps = ['Inv.','6m','1a','1,5a','2a','2,5a','3a','3,5a'];
-  for (let i=1; i<=scp.periodo-OBRA; i++) steps.push('+'+i+'a');
-  const N = steps.length;
+// ══════════════ CHARTS ══════════════
+function buildLine(d,scp,cdi,fii) {
+  const ctx=el('chart-line').getContext('2d');
+  const steps=['Inv.','6m','1a','1,5a','2a','2,5a','3a','3,5a'];
+  for(let i=1;i<=Math.round(scp.periodo-OBRA);i++) steps.push('+'+i+'a');
+  const N=steps.length;
 
-  const scpD = steps.map((_,i)=>{
-    const t = i*(scp.periodo/(N-1));
-    if (strat==='vender') {
-      if (t < OBRA) return +(scp.inv*(1+scp.val*t/OBRA)).toFixed(0);
-      return +(scp.inv + scp.total).toFixed(0);
+  const scpD=steps.map((_,i)=>{
+    const t=i*(scp.periodo/(N-1));
+    if(strat==='vender'){
+      return t<OBRA ? +(scp.inv*(1+scp.val*t/OBRA)).toFixed(0) : +(scp.inv+scp.total).toFixed(0);
     } else {
-      if (t<=OBRA) return +(scp.inv*(1+scp.val*t/OBRA)).toFixed(0);
-      return +(scp.inv+scp.capGain+scp.rLiq/(scp.periodo-OBRA)*(t-OBRA)).toFixed(0);
+      return t<=OBRA ? +(scp.inv*(1+scp.val*t/OBRA)).toFixed(0) : +(scp.inv+scp.capGain+scp.rLiq/(scp.periodo-OBRA)*(t-OBRA)).toFixed(0);
     }
   });
-  const cdiD = steps.map((_,i)=>{
-    const t = i*(scp.periodo/(N-1));
-    return +(scp.inv*Math.pow(1+d.selic*(1-d.ir),t)).toFixed(0);
-  });
-  const fiiD = steps.map((_,i)=>{
-    const t = i*(scp.periodo/(N-1));
-    return +(scp.inv + d.fii*0.85*t*scp.inv + scp.inv*(Math.pow(1+d.fiiC,t)-1)).toFixed(0);
-  });
+  const cdiD=steps.map((_,i)=>{ const t=i*(scp.periodo/(N-1)); return +(scp.inv*Math.pow(1+d.selic*(1-d.ir),t)).toFixed(0); });
+  const fiiD=steps.map((_,i)=>{ const t=i*(scp.periodo/(N-1)); return +(scp.inv+d.fii*.85*t*scp.inv+scp.inv*(Math.pow(1+d.fiiC,t)-1)).toFixed(0); });
+  const fV=v=>'R$'+(v>=1e6?(v/1e6).toFixed(2)+'M':(v/1000).toFixed(0)+'k');
 
-  const fmtV = v=>'R$'+(v>=1e6?(v/1e6).toFixed(2)+'M':(v/1000).toFixed(0)+'k');
-  const cfg = {
-    type:'line',
-    data:{ labels:steps, datasets:[
-      { label:'SCP Brooklin', data:scpD, borderColor:'#c8a96e', fill:false, tension:0.3, pointRadius:2, pointBackgroundColor:'#c8a96e', borderWidth:2 },
-      { label:'CDI líquido',  data:cdiD, borderColor:'#5b8fc9', fill:false, tension:0.3, pointRadius:2, pointBackgroundColor:'#5b8fc9', borderWidth:1.5 },
-      { label:'FII simulado', data:fiiD, borderColor:'#4db87a', fill:false, tension:0.3, pointRadius:2, pointBackgroundColor:'#4db87a', borderWidth:1.5, borderDash:[4,3] },
-    ]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{labels:{color:'#888',font:{size:10},boxWidth:10,padding:14,usePointStyle:true}}, tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtV(c.parsed.y)}} },
-      scales:{
-        x:{ticks:{color:'#555',font:{size:10},maxRotation:30},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.08)'}},
-        y:{ticks:{color:'#555',callback:fmtV,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.08)'}}
-      }
-    }
-  };
-  if (cLine) { cLine.data=cfg.data; cLine.update(); return; }
-  cLine = new Chart(ctx, cfg);
+  const cfg={type:'line',data:{labels:steps,datasets:[
+    {label:'SCP Brooklin',data:scpD,borderColor:'#c8a96e',fill:false,tension:.3,pointRadius:2,pointBackgroundColor:'#c8a96e',borderWidth:2},
+    {label:'CDI líquido', data:cdiD,borderColor:'#5b8fc9',fill:false,tension:.3,pointRadius:2,pointBackgroundColor:'#5b8fc9',borderWidth:1.5},
+    {label:'FII simulado',data:fiiD,borderColor:'#4db87a',fill:false,tension:.3,pointRadius:2,pointBackgroundColor:'#4db87a',borderWidth:1.5,borderDash:[4,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#888',font:{size:10},boxWidth:10,padding:14,usePointStyle:true}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fV(c.parsed.y)}}},
+    scales:{x:{ticks:{color:'#555',font:{size:10},maxRotation:30},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.08)'}},
+             y:{ticks:{color:'#555',callback:fV,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.08)'}}}}};
+  if(cLine){cLine.data=cfg.data;cLine.update();return;} cLine=new Chart(ctx,cfg);
 }
 
-function buildDonut(scp, d) {
-  const ctx = el('chart-donut').getContext('2d');
-  let labels, data, colors;
-  if (strat==='vender') {
-    const desconto = scp.inv * 0.43; // spread de entrada vs mercado
-    const valExtra = Math.max(0, scp.capGain - desconto);
-    const custos   = scp.irPago + scp.corretPago;
-    const liq      = scp.total;
-    labels = ['Desconto de entrada','Valorização regional','IR + Corretagem (custo)'];
-    data   = [
-      +((desconto/scp.inv)*100).toFixed(1),
-      +((valExtra/scp.inv)*100).toFixed(1),
-      -+(( custos/scp.inv)*100).toFixed(1),
-    ].map(Math.abs);
-    colors = ['#c8a96e','#5b8fc9','#d45f5f'];
+function buildDonut(scp,d) {
+  const ctx=el('chart-donut').getContext('2d');
+  let labels,data,colors;
+  if(strat==='vender'){
+    const desconto=scp.inv*.43, valExtra=Math.max(0,scp.capGain-desconto), custos=scp.irPago+scp.corretPago;
+    labels=['Desconto de entrada','Valorização regional','IR + Corretagem'];
+    data=[+(desconto/scp.inv*100).toFixed(1),+(valExtra/scp.inv*100).toFixed(1),+(custos/scp.inv*100).toFixed(1)];
+    colors=['#c8a96e','#5b8fc9','#d45f5f'];
   } else {
-    labels = ['Desconto de entrada','Valorização regional','Renda Airbnb líquida'];
-    data   = [
-      +((scp.inv*0.43/scp.total)*100).toFixed(1),
-      +((scp.capGain*0.57/scp.total)*100).toFixed(1),
-      +((scp.rLiq/scp.total)*100).toFixed(1),
-    ];
-    colors = ['#c8a96e','#5b8fc9','#4db87a'];
+    const tot=Math.max(1,scp.total);
+    labels=['Desconto de entrada','Valorização regional','Renda Airbnb líquida'];
+    data=[+(scp.inv*.43/tot*100).toFixed(1),+(scp.capGain*.57/tot*100).toFixed(1),+(scp.rLiq/tot*100).toFixed(1)];
+    colors=['#c8a96e','#5b8fc9','#4db87a'];
   }
-  const cfg = {
-    type:'doughnut',
-    data:{ labels, datasets:[{ data, backgroundColor:colors, borderColor:'#0a0a0a', borderWidth:3, borderRadius:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'60%',
-      plugins:{ legend:{position:'bottom',labels:{color:'#888',font:{size:10},boxWidth:8,padding:10}}, tooltip:{callbacks:{label:c=>' '+c.label+': '+c.parsed.toFixed(1)+'%'}} }
-    }
-  };
-  if (cDonut) { cDonut.data=cfg.data; cDonut.update(); return; }
-  cDonut = new Chart(ctx, cfg);
+  const cfg={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#0a0a0a',borderWidth:3,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#888',font:{size:10},boxWidth:8,padding:10}},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.parsed.toFixed(1)+'%'}}}}};
+  if(cDonut){cDonut.data=cfg.data;cDonut.update();return;} cDonut=new Chart(ctx,cfg);
 }
 
-// ═══════════════════ UTILS ═══════════════════
-const el  = id => document.getElementById(id);
-const fmt = n  => Math.round(n).toLocaleString('pt-BR');
-const fmtM= n  => n>=1e6?(n/1e6).toFixed(2)+'M':fmt(n);
-const f0  = n  => Math.round(n).toString();
-const f1  = n  => (+n).toFixed(1);
-const f2  = n  => (+n).toFixed(2);
-const verd= (cls,icon,title,desc) =>
-  `<div class="verdict ${cls}"><div class="v-icon">${icon}</div><div><div class="v-title">${title}</div><div class="v-desc">${desc}</div></div></div>`;
+// ══════════════ UTILS ══════════════
+const el=id=>document.getElementById(id);
+const fmt=n=>Math.round(n).toLocaleString('pt-BR');
+const fmtM=n=>n>=1e6?(n/1e6).toFixed(2)+'M':fmt(n);
+const f0=n=>Math.round(n).toString();
+const f1=n=>(+n).toFixed(1);
+const f2=n=>(+n).toFixed(2);
+const verd=(cls,icon,title,desc)=>`<div class="verdict ${cls}"><div class="v-icon">${icon}</div><div><div class="v-title">${title}</div><div class="v-desc">${desc}</div></div></div>`;
 
-// ═══════════════════ INIT ═══════════════════
-setStrat('vender'); // começa na estratégia de venda
+// INIT
+setStrat('operar'); // começa na operação pois temos dados reais AirDNA
 loadLive();
 </script>
 </body>
