@@ -632,7 +632,7 @@ table.bench tr:last-child td { border-bottom: none; }
   <div class="sc-tabs" id="sc-tabs">
     <button class="sc-btn ac" data-sc="base"         onclick="setScenario('base')">Base</button>
     <button class="sc-btn"    data-sc="otimista"      onclick="setScenario('otimista')">Otimista</button>
-    <button class="sc-btn"    data-sc="conservador"   onclick="setScenario('conservador')">Conservador</button>
+    <button class="sc-btn"    data-sc="pessimista"   onclick="setScenario('pessimista')">Pessimista</button>
     <button class="sc-btn"    data-sc="recessao"      onclick="setScenario('recessao')">Recessão</button>
     <button class="sc-btn"    data-sc="juros_altos"   onclick="setScenario('juros_altos')">Juros altos</button>
     <button class="sc-btn"    data-sc="queda_juros"   onclick="setScenario('queda_juros')">Queda de juros</button>
@@ -858,8 +858,8 @@ const SCENARIOS = {
     desc: 'Selic cai para 10% em 2027, inflação controlada. Polo corporativo Brooklin acelera com retorno presencial, Airbnb forte, valorização acima da média por pressão de demanda.',
     selicDelta: -3.5, ipcaOverride: 3.5, airbnbMult: 1.20, valMult: 1.25, fii: 7.5
   },
-  conservador: {
-    label: 'Cenário conservador',
+  pessimista: {
+    label: 'Cenário pessimista',
     color: 'acb',
     icon: '●',
     desc: 'Selic estável em ~14%, mercado imobiliário moderado. Airbnb com pressão de oferta no Brooklin por novos lançamentos. Valorização abaixo do projetado.',
