@@ -610,6 +610,14 @@ table.bench tr:last-child td { border-bottom: none; }
         </div>
         <input type="range" id="s-fii" min="6" max="12" step="0.5" value="8.5" oninput="update()">
       </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Valorização de cota FII (% a.a.)</span>
+          <span class="sl-val" id="lbl-fii-cota">3,0%</span>
+        </div>
+        <input type="range" id="s-fii-cota" min="-5" max="12" step="0.5" value="3" oninput="update()">
+      </div>
     </div>
   </div>
 
@@ -632,7 +640,7 @@ table.bench tr:last-child td { border-bottom: none; }
   <div class="sc-tabs" id="sc-tabs">
     <button class="sc-btn ac" data-sc="base"         onclick="setScenario('base')">Base</button>
     <button class="sc-btn"    data-sc="otimista"      onclick="setScenario('otimista')">Otimista</button>
-    <button class="sc-btn"    data-sc="pessimista"   onclick="setScenario('pessimista')">Pessimista</button>
+    <button class="sc-btn"    data-sc="conservador"   onclick="setScenario('conservador')">Conservador</button>
     <button class="sc-btn"    data-sc="recessao"      onclick="setScenario('recessao')">Recessão</button>
     <button class="sc-btn"    data-sc="juros_altos"   onclick="setScenario('juros_altos')">Juros altos</button>
     <button class="sc-btn"    data-sc="queda_juros"   onclick="setScenario('queda_juros')">Queda de juros</button>
@@ -858,8 +866,8 @@ const SCENARIOS = {
     desc: 'Selic cai para 10% em 2027, inflação controlada. Polo corporativo Brooklin acelera com retorno presencial, Airbnb forte, valorização acima da média por pressão de demanda.',
     selicDelta: -3.5, ipcaOverride: 3.5, airbnbMult: 1.20, valMult: 1.25, fii: 7.5
   },
-  pessimista: {
-    label: 'Cenário pessimista',
+  conservador: {
+    label: 'Cenário conservador',
     color: 'acb',
     icon: '●',
     desc: 'Selic estável em ~14%, mercado imobiliário moderado. Airbnb com pressão de oferta no Brooklin por novos lançamentos. Valorização abaixo do projetado.',
@@ -899,6 +907,9 @@ function setScenario(name) {
   const newSelic  = Math.max(8, Math.min(16, baseSelic + sc.selicDelta));
   el('s-selic').value  = newSelic;
   el('s-fii').value    = sc.fii;
+  const cotaMap = { base:3, otimista:5, conservador:1.5, recessao:-2, juros_altos:0.5, queda_juros:6 };
+  const cotaEl = document.getElementById('s-fii-cota');
+  if (cotaEl) cotaEl.value = cotaMap[name] ?? 3;
 
   const baseAirbnb = 68700, baseVal = 35;
   el('s-airbnb').value = Math.round(baseAirbnb * sc.airbnbMult / 5000) * 5000;
@@ -961,10 +972,14 @@ function calcCDI(d, T) {
 }
 
 function calcFII(d, T) {
-  const inv = d.qtd * 200000; let v = inv, acc = 0;
-  for (let i=0; i<T; i++) { acc += v * d.fii * 0.85; v *= 1.03; }
-  const tot = v - inv + acc;
-  return { pct: tot/inv, abs: tot, cagr: Math.pow(1+tot/inv,1/T)-1 };
+  const inv      = d.qtd * 200000;
+  const cotaEl   = document.getElementById('s-fii-cota');
+  const cotaAA   = cotaEl ? parseFloat(cotaEl.value) / 100 : 0.03;
+  const yieldLiq = d.fii * 0.85;
+  const rendAcc  = yieldLiq * T * inv;
+  const cotaGain = inv * (Math.pow(1 + cotaAA, T) - 1);
+  const tot      = rendAcc + cotaGain;
+  return { pct: tot/inv, abs: tot, cagr: Math.pow(1 + tot/inv, 1/T) - 1 };
 }
 
 function calcIPCAplus(d, T) {
@@ -1005,6 +1020,8 @@ function update() {
   el('lbl-selic').textContent  = f1(d.selic*100) + '% (proj.)';
   el('lbl-ir').textContent     = f1(d.ir*100) + '%';
   el('lbl-fii').textContent    = f1(d.fii*100) + '%';
+  const cotaEl2 = document.getElementById('s-fii-cota');
+  if (cotaEl2) el('lbl-fii-cota').textContent = f1(parseFloat(cotaEl2.value)) + '%';
 
   // Verdict
   const diff = scp.pct - cdi.pct;
