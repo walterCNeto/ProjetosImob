@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora SCP — Portugal Brooklin · Paes & Gregori</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
+
+:root {
+  --pg-copper:   #b08050;
+  --pg-copper2:  #c9956a;
+  --pg-copper-l: rgba(176,128,80,0.12);
+  --pg-copper-b: rgba(176,128,80,0.25);
+  --pg-dark:     #1a1714;
+  --pg-dark2:    #221e1b;
+  --pg-dark3:    #2c2722;
+  --pg-dark4:    #352e28;
+  --pg-stone:    #8a7d72;
+  --pg-stone2:   #5c5248;
+  --pg-light:    #f0ebe4;
+  --pg-light2:   #d8cfc5;
+  --pg-white:    #faf7f3;
+  --green:       #5aaa7a;
+  --green-d:     rgba(90,170,122,0.12);
+  --red:         #c96060;
+  --red-d:       rgba(201,96,96,0.12);
+  --blue:        #6a9cc9;
+  --blue-d:      rgba(106,156,201,0.12);
+  --amber:       #c9a050;
+  --amber-d:     rgba(201,160,80,0.12);
+  --border:      rgba(176,128,80,0.18);
+  --border2:     rgba(176,128,80,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+
+body {
+  background: var(--pg-dark);
+  color: var(--pg-light);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ═══ HEADER / HERO ═══ */
+.hero {
+  position: relative;
+  background: var(--pg-dark2);
+  border-bottom: 1px solid var(--border);
+  padding: 36px 48px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 340px; height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(176,128,80,0.06) 100%);
+  pointer-events: none;
+}
+.hero-geo {
+  position: absolute;
+  top: 16px; right: 48px;
+  display: flex; gap: 10px; opacity: 0.18;
+}
+.geo-hex {
+  width: 28px; height: 28px;
+  clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  background: var(--pg-copper);
+}
+.geo-hex.sm { width: 18px; height: 18px; opacity: 0.6; align-self: flex-end; }
+
+.logo-block {}
+.logo-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--pg-copper);
+  margin-bottom: 10px;
+}
+.logo-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--pg-white);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.logo-name span { color: var(--pg-copper2); font-style: italic; }
+.logo-sub {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--pg-stone);
+  letter-spacing: 0.5px;
+}
+.hero-right { text-align: right; }
+
+/* ── Live data pills ── */
+.live-strip {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--pg-dark3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+}
+.live-pill .pill-label { color: var(--pg-stone); }
+.live-pill .pill-value { color: var(--pg-light); font-weight: 400; }
+.live-pill .pill-value.up   { color: var(--green); }
+.live-pill .pill-value.down { color: var(--red); }
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 2s ease-in-out infinite;
+}
+.live-dot.loading { background: var(--pg-copper); }
+.live-dot.error   { background: var(--red); animation: none; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--pg-stone);
+  border-top: 1px solid var(--border2);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+/* ═══ MAIN LAYOUT ═══ */
+.main { max-width: 1200px; margin: 0 auto; padding: 40px 48px 80px; }
+
+/* ═══ SECTION ═══ */
+.section-head {
+  display: flex; align-items: center; gap: 18px;
+  margin: 40px 0 20px;
+}
+.section-head h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--pg-light);
+  white-space: nowrap;
+}
+.section-line { flex:1; height:1px; background: var(--border2); }
+.section-note {
+  font-size: 11px;
+  color: var(--pg-stone);
+  white-space: nowrap;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ═══ CARDS ═══ */
+.card {
+  background: var(--pg-dark2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 26px;
+}
+.card-title {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pg-copper);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-title::after { content:''; flex:1; height:1px; background: var(--border2); }
+
+/* ═══ GRID ═══ */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
+
+/* ═══ METRIC CARDS ═══ */
+.metric {
+  background: var(--pg-dark3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.metric-label { font-size: 10px; color: var(--pg-stone); letter-spacing: 0.5px; margin-bottom: 6px; }
+.metric-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 4px;
+  color: var(--pg-light);
+}
+.metric-value.copper { color: var(--pg-copper2); }
+.metric-value.green  { color: var(--green); }
+.metric-value.red    { color: var(--red); }
+.metric-value.blue   { color: var(--blue); }
+.metric-sub { font-size: 10px; color: var(--pg-stone); font-family:'DM Mono',monospace; }
+
+/* ═══ SLIDERS ═══ */
+.sl-wrap { margin-bottom: 16px; }
+.sl-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 6px;
+}
+.sl-label { font-size: 13px; font-weight: 300; color: var(--pg-light2); }
+.sl-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--pg-copper2);
+  font-weight: 400;
+}
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 2px;
+  background: var(--pg-dark4);
+  border-radius: 1px;
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--pg-copper);
+  border: 2px solid var(--pg-dark);
+  box-shadow: 0 0 0 3px var(--pg-copper-l);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+input[type=range]::-moz-range-thumb {
+  width:14px; height:14px; border-radius:50%;
+  background: var(--pg-copper); border:2px solid var(--pg-dark); cursor:pointer;
+}
+
+/* ═══ VERDICT ═══ */
+.verdict {
+  border-radius: 10px; padding: 16px 20px;
+  border: 1px solid; margin-bottom: 18px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.verdict.pos { background: var(--green-d);  border-color: rgba(90,170,122,0.3); }
+.verdict.neg { background: var(--red-d);    border-color: rgba(201,96,96,0.3); }
+.verdict.neu { background: var(--amber-d);  border-color: rgba(201,160,80,0.3); }
+.verdict-icon {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; flex-shrink: 0;
+}
+.verdict-title {
+  font-size: 14px; font-weight: 500; margin-bottom: 3px;
+}
+.verdict.pos .verdict-title { color: var(--green); }
+.verdict.neg .verdict-title { color: var(--red); }
+.verdict.neu .verdict-title { color: var(--amber); }
+.verdict-desc { font-size: 12px; color: var(--pg-stone); line-height: 1.6; }
+
+/* ═══ SCENARIO TABS ═══ */
+.sc-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.sc-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 7px 14px; border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--pg-dark3);
+  color: var(--pg-stone);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.sc-btn:hover { border-color: var(--pg-copper); color: var(--pg-light); }
+.sc-btn.ac  { background: var(--pg-copper-l); border-color: var(--pg-copper);  color: var(--pg-copper2); }
+.sc-btn.acg { background: var(--green-d);      border-color: var(--green);       color: var(--green); }
+.sc-btn.acr { background: var(--red-d);         border-color: var(--red);         color: var(--red); }
+.sc-btn.acb { background: var(--blue-d);        border-color: var(--blue);        color: var(--blue); }
+
+/* ═══ TABLE ═══ */
+.t-wrap { overflow-x: auto; }
+table.bench {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px;
+}
+table.bench th {
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--pg-stone); font-weight: 400; font-family: 'DM Mono', monospace;
+  text-align: left; padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+}
+table.bench td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border2);
+  color: var(--pg-light2);
+  vertical-align: middle;
+}
+table.bench tr.hl td   { background: rgba(176,128,80,0.05); }
+table.bench tr.hl td:first-child { border-left: 2px solid var(--pg-copper); }
+table.bench tr:last-child td { border-bottom: none; }
+.t-name { font-weight: 400; color: var(--pg-light); }
+.t-type { font-size: 10px; color: var(--pg-stone); display:block; margin-top:1px; font-family:'DM Mono',monospace; }
+.t-ret  { font-family:'DM Mono',monospace; }
+.bar-wrap { display:flex; align-items:center; gap:8px; }
+.bar-track { flex:1; height:3px; background: var(--pg-dark4); border-radius:2px; overflow:visible; }
+.bar-fill  { height:100%; border-radius:2px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+.rpill {
+  font-size:9px; font-family:'DM Mono',monospace;
+  padding:2px 8px; border-radius:20px; white-space:nowrap;
+}
+.rpill.low  { background:var(--green-d); color:var(--green); border:1px solid rgba(90,170,122,.2); }
+.rpill.med  { background:var(--amber-d); color:var(--amber); border:1px solid rgba(201,160,80,.2); }
+.rpill.high { background:var(--red-d);   color:var(--red);   border:1px solid rgba(201,96,96,.2); }
+
+/* ═══ BREAKEVEN ═══ */
+.be-card {
+  background: var(--pg-dark3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-align: center;
+}
+.be-card.ok   { border-color: rgba(90,170,122,.25); }
+.be-card.warn { border-color: rgba(201,160,80,.25); }
+.be-card.bad  { border-color: rgba(201,96,96,.25); }
+.be-label { font-size: 10px; color: var(--pg-stone); margin-bottom: 8px; letter-spacing: 0.5px; }
+.be-val   { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; margin-bottom:4px; }
+.be-card.ok   .be-val { color:var(--green); }
+.be-card.warn .be-val { color:var(--amber); }
+.be-card.bad  .be-val { color:var(--red); }
+.be-sub { font-size:10px; color:var(--pg-stone); font-family:'DM Mono',monospace; }
+
+/* ═══ LOSE SCENARIOS ═══ */
+.lose-card {
+  background: var(--pg-dark3);
+  border: 1px solid var(--border2);
+  border-radius: 10px; padding: 16px 18px;
+}
+.lose-card.active { background: var(--red-d); border-color: rgba(201,96,96,.3); }
+.lose-head {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:8px;
+}
+.lose-title { font-size:13px; font-weight:400; }
+.lose-card.active .lose-title { color: var(--red); }
+.lose-badge {
+  font-size:9px; font-family:'DM Mono',monospace;
+  padding:2px 8px; border-radius:20px;
+}
+.lose-card.active .lose-badge { background:var(--red-d); color:var(--red); border:1px solid rgba(201,96,96,.3); }
+.lose-card:not(.active) .lose-badge { background:var(--green-d); color:var(--green); border:1px solid rgba(90,170,122,.3); }
+.lose-desc { font-size:11px; color:var(--pg-stone); line-height:1.6; }
+
+/* ═══ DATA STATUS ═══ */
+.data-source {
+  font-size: 10px; color: var(--pg-stone2);
+  font-family: 'DM Mono', monospace;
+  margin-top: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ═══ FOOTER ═══ */
+.footer-pg {
+  background: var(--pg-dark2);
+  border-top: 1px solid var(--border);
+  padding: 28px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 300; letter-spacing: 2px;
+  color: var(--pg-stone);
+}
+.footer-brand span { color: var(--pg-copper); font-style: italic; }
+.footer-info { font-size:11px; color:var(--pg-stone2); line-height:1.8; }
+.footer-disc {
+  font-size: 10px; color: var(--pg-stone2);
+  font-family: 'DM Mono', monospace;
+  line-height: 1.7; max-width: 680px;
+  border-top: 1px solid var(--border2);
+  padding-top: 16px; margin-top: 16px;
+  width: 100%;
+}
+
+/* ═══ CHART ═══ */
+.chart-wrap { position: relative; width: 100%; }
+
+/* ═══ RESP ═══ */
+@media(max-width:900px) {
+  .hero { padding: 24px; flex-direction: column; align-items: flex-start; }
+  .hero-right { text-align: left; }
+  .live-strip { justify-content: flex-start; }
+  .main { padding: 24px; }
+  .g2,.g3,.g4 { grid-template-columns: 1fr 1fr; }
+  .footer-pg { padding: 24px; }
+}
+@media(max-width:600px) {
+  .g2,.g3,.g4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<header class="hero">
+  <div class="hero-geo">
+    <div class="geo-hex"></div>
+    <div class="geo-hex sm"></div>
+    <div class="geo-hex" style="opacity:.4"></div>
+  </div>
+  <div class="logo-block">
+    <div class="logo-eyebrow">Calculadora SCP · Pré-lançamento</div>
+    <div class="logo-name">Paes <span>&</span> Gregori</div>
+    <div class="logo-sub">Portugal Brooklin — Avenida Portugal, São Paulo</div>
+  </div>
+  <div class="hero-right">
+    <div class="live-strip" id="live-strip">
+      <div class="live-pill">
+        <div class="live-dot loading" id="dot-selic"></div>
+        <span class="pill-label">Selic</span>
+        <span class="pill-value" id="val-selic">—</span>
+      </div>
+      <div class="live-pill">
+        <div class="live-dot loading" id="dot-ipca"></div>
+        <span class="pill-label">IPCA</span>
+        <span class="pill-value" id="val-ipca">—</span>
+      </div>
+      <div class="live-pill">
+        <div class="live-dot loading" id="dot-cdi"></div>
+        <span class="pill-label">CDI</span>
+        <span class="pill-value" id="val-cdi">—</span>
+      </div>
+      <div class="live-pill">
+        <div class="live-dot" style="background:var(--pg-copper);animation:none"></div>
+        <span class="pill-label">m² Brooklin</span>
+        <span class="pill-value" style="color:var(--pg-copper2)">~R$13.000</span>
+      </div>
+    </div>
+    <div class="data-source" id="data-source-hero">
+      <span id="data-stamp">Carregando dados do Banco Central...</span>
+    </div>
+    <div class="hero-tagline">Localização é estratégia de liquidez.</div>
+  </div>
+</header>
+
+<!-- ═══════ MAIN ═══════ -->
+<div class="main">
+
+  <!-- PARÂMETROS -->
+  <div class="section-head">
+    <h2>Parâmetros do investimento</h2>
+    <div class="section-line"></div>
+    <span class="section-note">Ajuste os dados que você controla</span>
+  </div>
+
+  <div class="g2">
+    <!-- SCP -->
+    <div class="card">
+      <div class="card-title">Configuração SCP · Portugal Brooklin</div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Quantidade de studios</span>
+          <span class="sl-val" id="lbl-qtd">5 studios</span>
+        </div>
+        <input type="range" id="s-qtd" min="5" max="10" step="5" value="5" oninput="update()">
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Valorização esperada até a entrega</span>
+          <span class="sl-val" id="lbl-val">35%</span>
+        </div>
+        <input type="range" id="s-val" min="10" max="55" step="5" value="35" oninput="update()">
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Receita Airbnb anual por studio</span>
+          <span class="sl-val" id="lbl-airbnb">R$ 68.700</span>
+        </div>
+        <input type="range" id="s-airbnb" min="40000" max="120000" step="5000" value="68700" oninput="update()">
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Custo de gestão + vacância</span>
+          <span class="sl-val" id="lbl-custo">25%</span>
+        </div>
+        <input type="range" id="s-custo" min="15" max="40" step="5" value="25" oninput="update()">
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Anos de renda Airbnb (pós-entrega)</span>
+          <span class="sl-val" id="lbl-anos">2 anos</span>
+        </div>
+        <input type="range" id="s-anos" min="1" max="5" step="1" value="2" oninput="update()">
+      </div>
+    </div>
+
+    <!-- BENCHMARKS (leitura + IR ajustável) -->
+    <div class="card">
+      <div class="card-title">Benchmarks · Dados ao vivo + ajustes</div>
+
+      <div style="background:var(--pg-dark3);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;margin-bottom:16px;">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--pg-copper);margin-bottom:10px;">
+          Dados carregados automaticamente do Banco Central
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="live-table">
+          <div><div style="font-size:10px;color:var(--pg-stone);margin-bottom:2px;">Selic meta (a.a.)</div>
+            <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--pg-light)" id="lt-selic">—</div></div>
+          <div><div style="font-size:10px;color:var(--pg-stone);margin-bottom:2px;">IPCA (12 meses)</div>
+            <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--pg-light)" id="lt-ipca">—</div></div>
+          <div><div style="font-size:10px;color:var(--pg-stone);margin-bottom:2px;">CDI (equiv. Selic)</div>
+            <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--pg-light)" id="lt-cdi">—</div></div>
+          <div><div style="font-size:10px;color:var(--pg-stone);margin-bottom:2px;">Tesouro IPCA+ ref.</div>
+            <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--pg-copper2)" id="lt-ipca-plus">—</div></div>
+        </div>
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Selic média projetada no período</span>
+          <span class="sl-val" id="lbl-selic">—</span>
+        </div>
+        <input type="range" id="s-selic" min="8" max="16" step="0.5" value="13" oninput="update()">
+        <div style="font-size:10px;color:var(--pg-stone);margin-top:3px;">Ajuste a projeção de trajetória futura ↑</div>
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">IR sobre renda fixa (tabela regressiva)</span>
+          <span class="sl-val" id="lbl-ir">17,5%</span>
+        </div>
+        <input type="range" id="s-ir" min="15" max="22.5" step="2.5" value="17.5" oninput="update()">
+      </div>
+
+      <div class="sl-wrap">
+        <div class="sl-header">
+          <span class="sl-label">Dividend yield FII (% a.a.)</span>
+          <span class="sl-val" id="lbl-fii">8,5%</span>
+        </div>
+        <input type="range" id="s-fii" min="6" max="12" step="0.5" value="8.5" oninput="update()">
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="section-head" style="margin-top:32px;">
+    <h2>Resultado do investimento</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div id="verdict-box" style="margin-bottom:16px;"></div>
+
+  <div class="g4" id="metrics-grid"></div>
+
+  <!-- CENÁRIOS -->
+  <div class="section-head">
+    <h2>Cenários econômicos</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="sc-tabs" id="sc-tabs">
+    <button class="sc-btn ac" data-sc="base"         onclick="setScenario('base')">Base</button>
+    <button class="sc-btn"    data-sc="otimista"      onclick="setScenario('otimista')">Otimista</button>
+    <button class="sc-btn"    data-sc="conservador"   onclick="setScenario('conservador')">Conservador</button>
+    <button class="sc-btn"    data-sc="recessao"      onclick="setScenario('recessao')">Recessão</button>
+    <button class="sc-btn"    data-sc="juros_altos"   onclick="setScenario('juros_altos')">Juros altos</button>
+    <button class="sc-btn"    data-sc="queda_juros"   onclick="setScenario('queda_juros')">Queda de juros</button>
+  </div>
+
+  <div id="sc-desc-box" class="verdict neu" style="margin-bottom:20px;">
+    <div class="verdict-icon">◈</div>
+    <div>
+      <div class="verdict-title" id="sc-title">Cenário base</div>
+      <div class="verdict-desc" id="sc-desc">Selic em queda gradual para ~12%, IPCA controlado em ~4,5%, Brooklin com valorização média histórica. Linha 17 Ouro operando em 2026.</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Retorno total acumulado por ativo</div>
+      <div class="chart-wrap" style="height:260px;"><canvas id="chart-bar"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Evolução patrimonial — SCP vs CDI líquido</div>
+      <div class="chart-wrap" style="height:260px;"><canvas id="chart-line"></canvas></div>
+    </div>
+  </div>
+
+  <!-- BENCHMARKS TABLE -->
+  <div class="section-head">
+    <h2>Comparativo de ativos</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card" style="padding:0;margin-bottom:16px;">
+    <div class="t-wrap">
+      <table class="bench">
+        <thead>
+          <tr>
+            <th>Ativo</th>
+            <th>Retorno acumulado</th>
+            <th>Equiv. ao ano</th>
+            <th>Relativo</th>
+            <th>Risco</th>
+            <th>Liquidez</th>
+          </tr>
+        </thead>
+        <tbody id="bench-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BREAKEVEN -->
+  <div class="section-head">
+    <h2>Ponto de equilíbrio</h2>
+    <div class="section-line"></div>
+    <span class="section-note">O que o SCP precisa entregar para igualar o CDI</span>
+  </div>
+
+  <div class="g3" id="be-grid" style="margin-bottom:16px;"></div>
+
+  <!-- DECOMPOSIÇÃO -->
+  <div class="section-head">
+    <h2>Decomposição do retorno</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Fontes de retorno SCP</div>
+      <div class="chart-wrap" style="height:220px;"><canvas id="chart-donut"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Retorno real (descontado pelo IPCA)</div>
+      <div id="real-ret" style="padding-top:6px;"></div>
+    </div>
+  </div>
+
+  <!-- QUANDO PERDE -->
+  <div class="section-head">
+    <h2>Quando o SCP perde para renda fixa</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="g3" id="lose-grid" style="margin-bottom:16px;"></div>
+
+</div><!-- /main -->
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="footer-pg">
+  <div>
+    <div class="footer-brand">Paes <span>&</span> Gregori</div>
+    <div class="footer-info" style="margin-top:6px;">
+      Desde 1998 · São Paulo, SP<br>
+      Incorporadora com 20+ empreendimentos entregues<br>
+      <strong style="color:var(--pg-copper2);">Portugal Brooklin</strong> — Av. Portugal, Brooklin · Entrega Out/2029
+    </div>
+  </div>
+  <div class="footer-disc">
+    ⚠ Esta calculadora tem finalidade exclusivamente ilustrativa. As projeções não constituem garantia de rentabilidade nem recomendação de investimento. O investimento em SCP imobiliário envolve riscos específicos de iliquidez, risco construtora e risco de execução não capturados nesta análise financeira. Dados econômicos obtidos em tempo real via API pública do Banco Central do Brasil. Valorização do m² Brooklin baseada em dados públicos de mercado (Loft, ZAP, FipeZAP). Receita Airbnb baseada em dados AirDNA fevereiro/2026. Consulte um assessor de investimentos regulado (CVM) antes de qualquer decisão.
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DADOS LIVE — API BANCO CENTRAL DO BRASIL (sem CORS)
+// Séries: 432=Selic meta, 433=IPCA mensal, 4189=Selic aa
+// ═══════════════════════════════════════════════════════
+
+const BCB = {
+  selic_meta:  'https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json',
+  selic_aa:    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados/ultimos/1?formato=json',
+  ipca_mensal: 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/12?formato=json',
+  ipca_12m:    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json',
+};
+
+// Fallback values (current as of Mar/2026)
+const FALLBACK = { selic: 14.75, cdi: 14.65, ipca12m: 5.06, ipca_ref: 'Fallback' };
+
+let liveData = { ...FALLBACK, loaded: false };
+
+async function fetchBCB(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+async function loadLiveData() {
+  try {
+    const [selicData, ipcaData] = await Promise.all([
+      fetchBCB(BCB.selic_aa),
+      fetchBCB(BCB.ipca_mensal),
+    ]);
+
+    // Selic anualizada base 252
+    const selic = parseFloat(selicData[selicData.length-1].valor);
+
+    // IPCA acumulado 12 meses
+    let ipca12 = 1;
+    ipcaData.slice(-12).forEach(d => { ipca12 *= (1 + parseFloat(d.valor)/100); });
+    const ipca12m = (ipca12 - 1) * 100;
+
+    liveData = {
+      selic: +selic.toFixed(2),
+      cdi:   +(selic * 0.99).toFixed(2),
+      ipca12m: +ipca12m.toFixed(2),
+      loaded: true,
+      stamp: 'Fonte: Banco Central do Brasil · ' + new Date().toLocaleDateString('pt-BR')
+    };
+
+    applyLiveData();
+  } catch(e) {
+    // Tenta fallback via proxy CORS alternativo
+    try {
+      const r = await fetch('https://brasilapi.com.br/api/taxas/v1');
+      if (r.ok) {
+        const taxes = await r.json();
+        const selic = taxes.find(t => t.nome === 'Selic');
+        if (selic) {
+          liveData.selic = selic.valor;
+          liveData.cdi   = +(selic.valor * 0.99).toFixed(2);
+          liveData.loaded = true;
+          liveData.stamp  = 'Fonte: BrasilAPI · ' + new Date().toLocaleDateString('pt-BR');
+          applyLiveData();
+          return;
+        }
+      }
+    } catch(_) {}
+
+    // Usa fallback
+    liveData.stamp = 'Dados de referência Mar/2026 (API temporariamente indisponível)';
+    applyLiveData();
+  }
+}
+
+function applyLiveData() {
+  const { selic, cdi, ipca12m, loaded, stamp } = liveData;
+
+  // Pills
+  el('val-selic').textContent = selic.toFixed(2) + '%';
+  el('val-ipca').textContent  = ipca12m.toFixed(2) + '%';
+  el('val-cdi').textContent   = cdi.toFixed(2) + '%';
+
+  const dotColor = loaded ? 'var(--green)' : 'var(--amber)';
+  ['dot-selic','dot-ipca','dot-cdi'].forEach(id => {
+    const d = el(id);
+    d.style.background = dotColor;
+    d.classList.remove('loading');
+    if (loaded) d.classList.add('live');
+  });
+
+  // Live table
+  el('lt-selic').textContent    = selic.toFixed(2) + '% a.a.';
+  el('lt-ipca').textContent     = ipca12m.toFixed(2) + '% a.a.';
+  el('lt-cdi').textContent      = cdi.toFixed(2) + '% a.a.';
+  el('lt-ipca-plus').textContent = (ipca12m + 6.5).toFixed(2) + '% a.a.';
+
+  // Sync slider Selic para média projetada (um pouco abaixo da atual por antecipação de queda)
+  const selicMed = Math.max(8, selic - 1.5);
+  el('s-selic').value = selicMed;
+
+  el('data-stamp').textContent  = stamp || '';
+
+  update();
+}
+
+// ═══════════════════════════════════════════════════════
+// CENÁRIOS
+// ═══════════════════════════════════════════════════════
+
+const SCENARIOS = {
+  base: {
+    label: 'Cenário base',
+    color: 'ac',
+    icon: '◈',
+    desc: 'Selic em queda gradual para ~12%, IPCA controlado em ~4,5%, Brooklin com valorização histórica. Linha 17 Ouro operando. Airbnb com demanda estável de executivos.',
+    selicDelta: -1.5, ipcaOverride: null, airbnbMult: 1.00, valMult: 1.00, fii: 8.5
+  },
+  otimista: {
+    label: 'Cenário otimista',
+    color: 'acg',
+    icon: '▲',
+    desc: 'Selic cai para 10% em 2027, inflação controlada. Polo corporativo Brooklin acelera com retorno presencial, Airbnb forte, valorização acima da média por pressão de demanda.',
+    selicDelta: -3.5, ipcaOverride: 3.5, airbnbMult: 1.20, valMult: 1.25, fii: 7.5
+  },
+  conservador: {
+    label: 'Cenário conservador',
+    color: 'acb',
+    icon: '●',
+    desc: 'Selic estável em ~14%, mercado imobiliário moderado. Airbnb com pressão de oferta no Brooklin por novos lançamentos. Valorização abaixo do projetado.',
+    selicDelta: -0.5, ipcaOverride: 5.0, airbnbMult: 0.75, valMult: 0.70, fii: 9.0
+  },
+  recessao: {
+    label: 'Recessão',
+    color: 'acr',
+    icon: '▼',
+    desc: 'Recessão econômica. Desemprego sobe, demanda por moradia compacta cai, vacância alta. Imóveis valorizam abaixo da inflação. Selic pode subir para defender câmbio.',
+    selicDelta: +0.5, ipcaOverride: 7.0, airbnbMult: 0.50, valMult: 0.40, fii: 7.0
+  },
+  juros_altos: {
+    label: 'Juros altos persistentes',
+    color: 'acr',
+    icon: '⬆',
+    desc: 'Selic permanece acima de 15% por mais tempo. Custo de oportunidade máximo. Renda fixa mantém vantagem estrutural forte sobre ativos reais no período analisado.',
+    selicDelta: +0.5, ipcaOverride: 5.5, airbnbMult: 0.85, valMult: 0.75, fii: 9.5
+  },
+  queda_juros: {
+    label: 'Queda agressiva de juros',
+    color: 'acg',
+    icon: '⬇',
+    desc: 'Selic cai para 9% até 2028. Imóveis alavancados por crédito barato. Forte valorização no Brooklin e demanda acelerada por moradia compacta com renda de aluguel crescente.',
+    selicDelta: -4.5, ipcaOverride: 3.0, airbnbMult: 1.15, valMult: 1.40, fii: 6.5
+  },
+};
+
+let currentSc = 'base';
+
+function setScenario(name) {
+  currentSc = name;
+  const sc = SCENARIOS[name];
+
+  // Ajusta sliders
+  const baseSelic = liveData.selic;
+  const newSelic  = Math.max(8, Math.min(16, baseSelic + sc.selicDelta));
+  el('s-selic').value  = newSelic;
+  el('s-fii').value    = sc.fii;
+
+  const baseAirbnb = 68700, baseVal = 35;
+  el('s-airbnb').value = Math.round(baseAirbnb * sc.airbnbMult / 5000) * 5000;
+  el('s-val').value    = Math.max(10, Math.min(55, Math.round(baseVal * sc.valMult / 5) * 5));
+
+  // Botões
+  document.querySelectorAll('.sc-btn').forEach(b => {
+    b.className = 'sc-btn';
+  });
+  document.querySelector(`[data-sc="${name}"]`).classList.add('sc-btn', sc.color);
+
+  // Descrição
+  const box  = el('sc-desc-box');
+  const map  = { acg:'pos', acr:'neg', acb:'neu', ac:'neu' };
+  box.className = 'verdict ' + (map[sc.color] || 'neu');
+  el('sc-title').textContent = sc.label;
+  el('sc-desc').textContent  = sc.desc;
+  box.querySelector('.verdict-icon').textContent = sc.icon;
+
+  update();
+}
+
+// ═══════════════════════════════════════════════════════
+// CÁLCULOS
+// ═══════════════════════════════════════════════════════
+
+const OBRA = 3.5;
+
+function p() {
+  return {
+    qtd:    parseInt(el('s-qtd').value),
+    val:    parseFloat(el('s-val').value) / 100,
+    airbnb: parseFloat(el('s-airbnb').value),
+    custo:  parseFloat(el('s-custo').value) / 100,
+    anos:   parseInt(el('s-anos').value),
+    selic:  parseFloat(el('s-selic').value) / 100,
+    ir:     parseFloat(el('s-ir').value) / 100,
+    fii:    parseFloat(el('s-fii').value) / 100,
+    ipca:   Math.max(0.02, liveData.ipca12m / 100),
+  };
+}
+
+function calcSCP(d) {
+  const inv     = d.qtd * 200000;
+  const capGain = inv * d.val;
+  const rBruta  = d.airbnb * d.qtd * d.anos;
+  const rLiq    = rBruta * (1 - d.custo);
+  const total   = capGain + rLiq;
+  const pct     = total / inv;
+  const periodo = OBRA + d.anos;
+  const cagr    = Math.pow(1 + pct, 1/periodo) - 1;
+  return { inv, capGain, rBruta, rLiq, total, pct, cagr, periodo };
+}
+
+function calcCDI(d, T) {
+  const inv  = d.qtd * 200000;
+  const brut = Math.pow(1 + d.selic, T) - 1;
+  const liq  = brut * (1 - d.ir);
+  return { pct: liq, abs: inv * liq, cagr: Math.pow(1+liq,1/T)-1 };
+}
+
+function calcFII(d, T) {
+  const inv = d.qtd * 200000; let v = inv, acc = 0;
+  for (let i=0; i<T; i++) { acc += v * d.fii * 0.85; v *= 1.03; }
+  const tot = v - inv + acc;
+  return { pct: tot/inv, abs: tot, cagr: Math.pow(1+tot/inv,1/T)-1 };
+}
+
+function calcIPCAplus(d, T) {
+  const inv = d.qtd * 200000;
+  const j   = d.ipca + 0.065;
+  const b   = Math.pow(1+j, T) - 1;
+  const l   = b * (1 - d.ir);
+  return { pct: l, abs: inv*l, cagr: Math.pow(1+l,1/T)-1 };
+}
+
+function calcPoup(d, T) {
+  const inv  = d.qtd * 200000;
+  const taxa = d.selic > 0.085 ? 0.065 : d.selic * 0.7;
+  const ret  = Math.pow(1+taxa, T) - 1;
+  return { pct: ret, abs: inv*ret, cagr: taxa };
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+
+let cBar = null, cLine = null, cDonut = null;
+
+function update() {
+  const d   = p();
+  const scp = calcSCP(d);
+  const cdi = calcCDI(d, scp.periodo);
+  const fii = calcFII(d, scp.periodo);
+  const ipl = calcIPCAplus(d, scp.periodo);
+  const pou = calcPoup(d, scp.periodo);
+
+  // Labels sliders
+  el('lbl-qtd').textContent    = d.qtd + ' studios';
+  el('lbl-val').textContent    = f1(d.val*100) + '%';
+  el('lbl-airbnb').textContent = 'R$ ' + fmt(d.airbnb);
+  el('lbl-custo').textContent  = f0(d.custo*100) + '%';
+  el('lbl-anos').textContent   = d.anos + (d.anos===1?' ano':' anos');
+  el('lbl-selic').textContent  = f1(d.selic*100) + '% (proj.)';
+  el('lbl-ir').textContent     = f1(d.ir*100) + '%';
+  el('lbl-fii').textContent    = f1(d.fii*100) + '%';
+
+  // Verdict
+  const diff = scp.pct - cdi.pct;
+  const vb   = el('verdict-box');
+  if (diff > 0.10) {
+    vb.innerHTML = verdict('pos', '▲',
+      `SCP supera o CDI líquido em ${f1(diff*100)} p.p. no período`,
+      `Retorno SCP: ${f1(scp.pct*100)}% · CDI líquido: ${f1(cdi.pct*100)}% · Diferença em valor absoluto: R$ ${fmt(scp.total - cdi.abs)}`);
+  } else if (diff > -0.05) {
+    vb.innerHTML = verdict('neu', '◈',
+      `SCP empata com o CDI — margem de ${f1(Math.abs(diff)*100)} p.p.`,
+      `Retorno SCP: ${f1(scp.pct*100)}% · CDI líquido: ${f1(cdi.pct*100)}% · Neste cenário só se justifica por diversificação patrimonial.`);
+  } else {
+    vb.innerHTML = verdict('neg', '▼',
+      `CDI supera o SCP em ${f1(Math.abs(diff)*100)} p.p. — imóvel perde neste cenário`,
+      `CDI líquido: ${f1(cdi.pct*100)}% · SCP: ${f1(scp.pct*100)}% · Revise as premissas ou aguarde condições de juros mais favoráveis.`);
+  }
+
+  // Metrics
+  el('metrics-grid').innerHTML = [
+    { l:'Investimento total',   v: 'R$ '+fmtM(scp.inv),   c:'',       s: d.qtd+' studios × R$200k' },
+    { l:'Retorno total SCP',    v: f1(scp.pct*100)+'%',    c: diff>0?'green':'red', s: 'R$ '+fmt(scp.total)+' em '+scp.periodo.toFixed(1)+' anos' },
+    { l:'CAGR equiv. ao ano',   v: f2(scp.cagr*100)+'%',  c:'copper', s: 'vs CDI ' + f2(calcCDI(d,1).pct*100)+'% a.a. líq.' },
+    { l:'Ganho vs CDI (abs.)',  v: (scp.total>cdi.abs?'+':'')+' R$ '+fmt(Math.abs(scp.total-cdi.abs)), c: scp.total>cdi.abs?'green':'red', s: scp.total>cdi.abs?'a favor do imóvel':'a favor do CDI' },
+  ].map(m=>`<div class="metric"><div class="metric-label">${m.l}</div><div class="metric-value ${m.c}">${m.v}</div><div class="metric-sub">${m.s}</div></div>`).join('');
+
+  // Bench table
+  const ativos = [
+    { n:'SCP Portugal Brooklin', t:'Imóvel compacto · Airbnb', ret:scp.pct, aa:scp.cagr, risco:'alto',  liq:'Nenhuma', hl:true },
+    { n:'CDB 100% CDI',          t:'Renda fixa · FGC',         ret:cdi.pct, aa:cdi.cagr, risco:'baixo', liq:'Diária',  hl:false },
+    { n:'Tesouro IPCA+ 6,5%',    t:'Renda fixa · Tesouro',     ret:ipl.pct, aa:ipl.cagr, risco:'baixo', liq:'D+1',     hl:false },
+    { n:'FII Diversificado',      t:'Renda variável · Imob.',   ret:fii.pct, aa:fii.cagr, risco:'médio', liq:'Diária',  hl:false },
+    { n:'Poupança',               t:'Renda fixa · FGC',         ret:pou.pct, aa:pou.cagr, risco:'baixo', liq:'Imediata',hl:false },
+  ];
+  const maxR = Math.max(...ativos.map(a=>a.ret));
+  const rMap = {baixo:'low',médio:'med',alto:'high'};
+  el('bench-tbody').innerHTML = ativos.map(a=>`
+    <tr class="${a.hl?'hl':''}">
+      <td><span class="t-name">${a.n}</span><span class="t-type">${a.t}</span></td>
+      <td><span class="t-ret" style="color:${a.hl?'var(--pg-copper2)':a.ret===maxR?'var(--green)':'var(--pg-light2)'}">${f1(a.ret*100)}%</span></td>
+      <td><span class="t-ret" style="color:var(--pg-stone)">${f2(a.aa*100)}%</span></td>
+      <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${Math.max(4,a.ret/maxR*100).toFixed(1)}%;background:${a.hl?'var(--pg-copper)':a.ret===maxR?'var(--green)':'var(--pg-dark4)'}"></div></div></div></td>
+      <td><span class="rpill ${rMap[a.risco]}">${a.risco}</span></td>
+      <td style="font-size:11px;color:var(--pg-stone)">${a.liq}</td>
+    </tr>`).join('');
+
+  // Breakeven
+  const beVal   = (cdi.abs - scp.rLiq) / scp.inv * 100;
+  const beAirbnb = (cdi.abs - scp.capGain) / (d.qtd * d.anos * (1-d.custo));
+  const beOcup  = (cdi.abs - scp.capGain) / (d.qtd * d.anos * d.airbnb * (1-d.custo)) * 100;
+  el('be-grid').innerHTML = [
+    { l:'Valorização mínima para bater CDI', v:f1(Math.max(0,beVal))+'%',   ok: beVal<=d.val*100, sub:`Projetado: ${f1(d.val*100)}%` },
+    { l:'Receita Airbnb mínima por studio',  v:'R$ '+fmt(Math.max(0,beAirbnb)), ok: beAirbnb<=d.airbnb, sub:`Projetado: R$ ${fmt(d.airbnb)}` },
+    { l:'Ocupação Airbnb mínima',            v:f0(Math.min(100,Math.max(0,beOcup)))+'%', ok: beOcup<=67, sub:`Média Brooklin: 67%` },
+  ].map(b=>{
+    const cls = b.ok?'ok':beVal>55||beOcup>90?'bad':'warn';
+    return `<div class="be-card ${cls}"><div class="be-label">${b.l}</div><div class="be-val">${b.v}</div><div class="be-sub">${b.sub} · ${b.ok?'✓ dentro do intervalo':'⚠ acima do projetado'}</div></div>`;
+  }).join('');
+
+  // Retorno real
+  const iT = Math.pow(1+d.ipca, scp.periodo)-1;
+  const rows = [
+    {n:'SCP Brooklin',r:((1+scp.pct)/(1+iT))-1,c:'var(--pg-copper2)'},
+    {n:'CDB 100% CDI',r:((1+cdi.pct)/(1+iT))-1,c:'var(--blue)'},
+    {n:'FII',         r:((1+fii.pct)/(1+iT))-1,c:'var(--green)'},
+  ];
+  const maxRR = Math.max(...rows.map(r=>Math.abs(r.r)));
+  el('real-ret').innerHTML = rows.map(r=>`
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;">
+        <span style="color:var(--pg-stone)">${r.n}</span>
+        <span style="font-family:'DM Mono',monospace;color:${r.r>=0?r.c:'var(--red)'}">${r.r>=0?'+':''}${f1(r.r*100)}%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(Math.abs(r.r)/maxRR*100).toFixed(1)}%;background:${r.r>=0?r.c:'var(--red)'}"></div></div>
+    </div>`).join('')
+    + `<div style="font-size:10px;color:var(--pg-stone);margin-top:10px;font-family:'DM Mono',monospace;">Inflação acumulada: +${f1(iT*100)}% (IPCA ${f1(d.ipca*100)}% a.a.)</div>`;
+
+  // Lose scenarios
+  el('lose-grid').innerHTML = [
+    { t:'Juros acima de 13,5%', active: d.selic>=0.135,
+      desc:`Com Selic ≥13,5% sustentada, o CDI acumula ${f1(calcCDI({...d,selic:0.14},scp.periodo).pct*100)}% líquido. O imóvel precisa de valorização >40% + Airbnb forte para superar.` },
+    { t:'Valorização < 20%', active: d.val<0.20,
+      desc:`Se o m² não valorizar ≥20% até 2029, a renda Airbnb isolada não compensa o CDI. O risco da obra precisa ser compensado por upside real de capital.` },
+    { t:'Ocupação Airbnb < 50%', active: d.airbnb<50000*0.85,
+      desc:`Saturação de oferta ou regulação do Airbnb pode derrubar receita. Abaixo de 50% de ocupação média, a renda não complementa o ganho de capital de forma relevante.` },
+  ].map(s=>`
+    <div class="lose-card ${s.active?'active':''}">
+      <div class="lose-head">
+        <div class="lose-title">${s.t}</div>
+        <span class="lose-badge">${s.active?'Ativo agora':'Não se aplica'}</span>
+      </div>
+      <div class="lose-desc">${s.desc}</div>
+    </div>`).join('');
+
+  // Charts
+  buildBar(ativos);
+  buildLine(d, scp, cdi);
+  buildDonut(scp);
+}
+
+// ─── CHARTS ───
+
+function buildBar(ativos) {
+  const ctx = el('chart-bar').getContext('2d');
+  const cols = ativos.map(a => a.hl?'#b08050':a.ret===Math.max(...ativos.map(x=>x.ret))?'#5aaa7a':'#352e28');
+  const cfg = {
+    type:'bar',
+    data:{ labels: ativos.map(a=>a.n.length>18?a.n.slice(0,17)+'…':a.n),
+           datasets:[{ data: ativos.map(a=>+((a.ret*100).toFixed(1))), backgroundColor:cols, borderRadius:5, borderSkipped:false }] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>' '+c.parsed.y.toFixed(1)+'% acumulado'}} },
+      scales:{
+        x:{ticks:{color:'#5c5248',font:{size:10}},grid:{color:'rgba(176,128,80,0.06)'},border:{color:'rgba(176,128,80,0.12)'}},
+        y:{ticks:{color:'#5c5248',callback:v=>v+'%',font:{size:10}},grid:{color:'rgba(176,128,80,0.06)'},border:{color:'rgba(176,128,80,0.12)'}}
+      }
+    }
+  };
+  if (cBar) { cBar.data = cfg.data; cBar.update(); return; }
+  cBar = new Chart(ctx, cfg);
+}
+
+function buildLine(d, scp, cdi) {
+  const ctx = el('chart-line').getContext('2d');
+  const steps = ['Inv.','6m','1a','1,5a','2a','2,5a','3a','3,5a'];
+  for (let i=1; i<=scp.periodo-OBRA; i++) steps.push('+'+i+'a');
+  const scpD = steps.map((_,i)=>{
+    const t = i*(scp.periodo/(steps.length-1));
+    if (t<=OBRA) return +(scp.inv*(1+scp.val*t/OBRA)).toFixed(0);
+    return +(scp.inv+scp.capGain+scp.rLiq/(scp.periodo-OBRA)*(t-OBRA)).toFixed(0);
+  });
+  const cdiD = steps.map((_,i)=>{
+    const t = i*(scp.periodo/(steps.length-1));
+    return +(scp.inv*Math.pow(1+d.selic*(1-d.ir),t)).toFixed(0);
+  });
+  const fmtV = v=>'R$'+(v>=1e6?(v/1e6).toFixed(2)+'M':(v/1000).toFixed(0)+'k');
+  const cfg = {
+    type:'line',
+    data:{ labels:steps,
+      datasets:[
+        { label:'SCP Brooklin', data:scpD, borderColor:'#b08050', backgroundColor:'rgba(176,128,80,0.06)', fill:true, tension:0.3, pointRadius:2, pointBackgroundColor:'#b08050' },
+        { label:'CDI líquido',  data:cdiD, borderColor:'#6a9cc9', backgroundColor:'rgba(106,156,201,0.04)', fill:true, tension:0.3, pointRadius:2, pointBackgroundColor:'#6a9cc9' }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:'#5c5248',font:{size:10},boxWidth:8,padding:12}},
+        tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtV(c.parsed.y)}} },
+      scales:{
+        x:{ticks:{color:'#5c5248',font:{size:10}},grid:{color:'rgba(176,128,80,0.06)'},border:{color:'rgba(176,128,80,0.12)'}},
+        y:{ticks:{color:'#5c5248',callback:fmtV,font:{size:10}},grid:{color:'rgba(176,128,80,0.06)'},border:{color:'rgba(176,128,80,0.12)'}}
+      }
+    }
+  };
+  if (cLine) { cLine.data = cfg.data; cLine.update(); return; }
+  cLine = new Chart(ctx, cfg);
+}
+
+function buildDonut(scp) {
+  const ctx = el('chart-donut').getContext('2d');
+  const cfg = {
+    type:'doughnut',
+    data:{
+      labels:['Desconto de entrada vs. mercado','Valorização regional adicional','Renda Airbnb líquida'],
+      datasets:[{
+        data:[
+          +((scp.inv*0.43/scp.total)*100).toFixed(1),
+          +((scp.capGain*0.57/scp.total)*100).toFixed(1),
+          +((scp.rLiq/scp.total)*100).toFixed(1)
+        ],
+        backgroundColor:['#b08050','#6a9cc9','#5aaa7a'],
+        borderColor:'#1a1714',
+        borderWidth:3, borderRadius:3
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      cutout:'60%',
+      plugins:{
+        legend:{position:'bottom',labels:{color:'#5c5248',font:{size:10},boxWidth:8,padding:10}},
+        tooltip:{callbacks:{label:c=>' '+c.label+': '+c.parsed.toFixed(1)+'%'}}
+      }
+    }
+  };
+  if (cDonut) { cDonut.data = cfg.data; cDonut.update(); return; }
+  cDonut = new Chart(ctx, cfg);
+}
+
+// ─── UTILS ───
+function el(id) { return document.getElementById(id); }
+function fmt(n)  { return Math.round(n).toLocaleString('pt-BR'); }
+function fmtM(n) { return n>=1e6?(n/1e6).toFixed(2)+'M':fmt(n); }
+function f0(n)   { return Math.round(n).toString(); }
+function f1(n)   { return n.toFixed(1); }
+function f2(n)   { return n.toFixed(2); }
+function verdict(cls, icon, title, desc) {
+  return `<div class="verdict ${cls}"><div class="verdict-icon">${icon}</div><div><div class="verdict-title">${title}</div><div class="verdict-desc">${desc}</div></div></div>`;
+}
+
+// ─── INIT ───
+loadLiveData();
+</script>
+</body>
+</html>
